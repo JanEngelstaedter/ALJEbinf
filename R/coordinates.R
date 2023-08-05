@@ -44,14 +44,18 @@ getCoordinates <- function(dnaFocal, dnaRef) {
   coordinates <- data.frame(posFocal = rep(NA_integer_, length(aligFocal)),
                             posRef   = NA_integer_)
   for (i in 1:length(aligFocal)) {
-    letterFocal <- Biostrings::extractAt(aligFocal, IRanges::IRanges(i)) |> as.character()
-    letterRef <- Biostrings::extractAt(aligRef, IRanges::IRanges(i)) |> as.character()
-    if (letterFocal != "-")
+    letterFocal <- Biostrings::extractAt(aligFocal, IRanges::IRanges(i)) |>
+      as.character()
+    letterRef <- Biostrings::extractAt(aligRef, IRanges::IRanges(i)) |>
+      as.character()
+    if (letterFocal != "-") {
       posFocal <- posFocal + 1L
-    if (letterRef != "-")
+      coordinates$posFocal[i] <- posFocal
+    }
+    if (letterRef != "-") {
       posRef <- posRef + 1L
-    coordinates$posFocal[i] <- posFocal
-    coordinates$posRef[i] <- posRef
+      coordinates$posRef[i] <- posRef
+    }
   }
   return(coordinates)
 }
