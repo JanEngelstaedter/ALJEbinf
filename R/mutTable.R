@@ -29,7 +29,7 @@ isPointMutation <- function(muts, k) {
   if (!is.na(muts$Codon_OtoM[k])) {
     if (!stringr::str_detect(muts$Codon_OtoM[k], " -> "))
       pointMut <- FALSE
-    codons <- stringr::str_split(muts$Codon_OtoM[k], pattern = fixed(" -> "))[[1]]
+    codons <- stringr::str_split(muts$Codon_OtoM[k], pattern = stringr::fixed(" -> "))[[1]]
     if ((length(codons) != 2L) || (nchar(codons[1]) != 3L) || (nchar(codons[2]) != 3L))
       pointMut <- FALSE
   }
@@ -46,7 +46,7 @@ isPointMutation <- function(muts, k) {
   if (!is.na(muts$AA_OtoM[k])) {
     if (!stringr::str_detect(muts$AA_OtoM[k], " -> "))
       pointMut <- FALSE
-    aas <- stringr::str_split(muts$AA_OtoM[k], pattern = fixed(" -> "))[[1]]
+    aas <- stringr::str_split(muts$AA_OtoM[k], pattern = stringr::fixed(" -> "))[[1]]
     if ((length(aas) != 2L) || (nchar(aas[1]) != 1L) || (nchar(aas[2]) != 1L))
       pointMut <- FALSE
   }
