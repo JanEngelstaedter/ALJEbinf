@@ -397,7 +397,7 @@ fillMutationsTableRow_Protein <- function(muts, k, refSeq_ID, seqs, coordinates)
 #'
 #' @param muts An (incomplete) mutations table.
 #' @param refs A table specifying the species and names for all reference sequences.
-#' @param seqs Reference sequences as a DNAStringSet object, with names as specified in refs.
+#' @param seqs Reference sequences as a DNAStringSet object, with names as specified in `refs`.
 #' @param coordinates A list of coordinates, with names corresponding to seqs.
 #'
 #' @return A muts table that is (hopefully) more complete than the input table.
@@ -410,7 +410,7 @@ fillMutationsTable <- function(muts, refs, seqs, coordinates) {
   muts$Nt_pos_Ecoli <- as.integer(muts$Nt_pos_Ecoli)
   muts$AA_pos <- as.integer(muts$AA_pos)
   muts$AA_pos_Ecoli <- as.integer(muts$AA_pos_Ecoli)
-  muts$MIC_mgPerL <- as.double(muts$MIC_mgPerL)
+  #muts$MIC_mgPerL <- as.double(muts$MIC_mgPerL)
 
   # add strainID columns:
   muts <- dplyr::mutate(muts, Strain_ID = gsub(" ", "_", paste(Species, Strain)))

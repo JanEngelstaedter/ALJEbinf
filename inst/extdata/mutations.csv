@@ -1,0 +1,7 @@
+Species,Strain,Genotype,Gene,Nt_pos,Nt_pos_Ecoli,Nt_original,Nt_mutation,Nt_OtoM,Nt_mut_name,Nt_mut_name_Ecoli,Codon_original,Codon_mutation,Codon_OtoM,AA_pos,AA_pos_Ecoli,AA_original,AA_mutation,AA_OtoM,AA_mut_name,AA_mut_name_Ecoli
+Acinetobacter baylyi,AB3,RM14,rpoB,1548,NA,NA,NA,C -> G,rpoB_C1548G,NA,NA,NA,AGC -> AGG,516,NA,NA,NA,S -> R,NA,NA
+Acinetobacter baylyi,AB3,OH_Rif2,rpoB,NA,NA,NA,NA,NA,rpoB_C1556T,NA,NA,NA,TCT -> TTT,519,NA,NA,NA,S -> F,NA,NA
+Escherichia coli,NA,NA,rpoB,NA,NA,NA,NA,NA,NA,NA,CAG,CTG,NA,513,513,Q,L,NA,NA,NA
+Escherichia coli,MG1655,R9,rpoB,1565,NA,NA,NA,C -> T,rpoB_C1565T,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+Escherichia coli,MG1655,NA,rpoB,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,148,148,Q,L,NA,NA,NA
+Mycobacterium tuberculosis,NA,NA,rpoB,NA,NA,NA,NA,NA,NA,NA,GCG,GTG,NA,NA,381,A,V,NA,NA,NA

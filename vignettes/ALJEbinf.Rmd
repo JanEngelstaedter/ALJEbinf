@@ -49,10 +49,105 @@ coords <- getCoordinates(seqs[["rpoB_Mycobacterium_tuberculosis_H37Rv"]],
 These coordinates take the form of a data frame with two columns: `posFocal`, the position of the first, focal sequence (in this case *M. tuberculosis*), and `posRef`, the corresponding position of the reference sequence (in this case *E. coli*):
 
 ```{r}
-coords[1:30, ]
+coords[1:50, ]
 ```
 
+This table indicates that the first 27 nucleotides align (same position), but then there is an insertion in the *M. tuberculosis* sequence relative to the *E. coli* sequence. Note that the alignment unpinning the coordinates is based a protein alignment even though the positions are given as nucleotide positions.
+
+Using these coordinates, we can now translate nucleotide positions from *M. tuberculosis* to *E.coli*:
+
+```{r}
+translateCoordinate(10, coords)
+translateCoordinate(30, coords)
+translateCoordinate(50, coords)
+```
+
+We can also translate into the opposite direction:
+```{r}
+translateCoordinate(10, coords, direction = "RefToFocal")
+translateCoordinate(29, coords, direction = "RefToFocal")
+```
+
+Instead of nucleotide positions, we can also translate between aminoacid (or codon) positions, again in either direction:
+
+```{r}
+translateCoordinate(5, coords, AAinput = TRUE, AAoutput = TRUE)
+translateCoordinate(10, coords, AAinput = TRUE, AAoutput = TRUE)
+translateCoordinate(5, coords, direction = "RefToFocal", AAinput = TRUE, AAoutput = TRUE)
+translateCoordinate(10, coords, direction = "RefToFocal", AAinput = TRUE, AAoutput = TRUE)
+```
+
+Finally, we can use the function `getAllCoordinates` to calculate coordinates for not just one pair of sequences but for all sequences in a list against one particular reference sequence:
+
+```{r}
+allCoords <- getAllCoordinates(seqs, "rpoB_Escherichia_coli_MG1655")
+```
+
+Here, the second argument is the name of the sequence (within the `seqs` list of sequences) to be used as the reference. The output is a list of coordinate tables that each can be used as above to translate between coordinates.
+
 ## Mutation tables
+
+In this section we will cover the `fillMutationsTable` function, which is designed to bring data for mutations (particularly from mutant screens) into a standardised format. The focus is very much on point mutations and currently the function does not deal well with other mutations such as indels.
+
+The starting point is a table that must have exactly the following columns:
+
+```{r, echo = FALSE, message = FALSE}
+muts <- readr::read_csv("../inst/extdata/mutations.csv")
+columns <- data.frame(Column = names(muts),
+                      Description = c("Name of species",
+                                      "Strain name (if any)",
+                                      "Genotype name (if any)",
+                                      "What gene is the mutation in?",
+                                      "Nucleotide position within this gene",
+                                      "Nucleotide position in E. coli coordinates",
+                                      "Original nucleotide in the wildtype",
+                                      "Nucleotide in mutant",
+                                      "Mutation at nucleotide level, e.g., 'A -> C'",
+                                      "Mutation name in standard format, e.g., 'rpoB_A1576C'",
+                                      "Mutation name in the same format but with E. coli coordinates",
+                                      "Codon in wildtype",
+                                      "Mutated codon",
+                                      "Mutation at codon level, e.g., 'AGG -> CGG'",
+                                      "Amino acid position",
+                                      "Amino acid position in E. coli coordinates",
+                                      "Original amino acid in wildtype",
+                                      "Amino acid in mutant",
+                                      "Mutation at amino acid level, e.g., 'S -> F'",
+                                      "Mutation name in standard format, e.g. 'rpoB_S566F'",
+                                      "Mutation name in same format but with E. coli coordinates"))
+```
+```{r}
+knitr::kable(columns)
+```
+
+(The table could contain many NAs in those columns though, and can also contain additional column.)
+
+Suppose we have such a table of mutations in the rpoB gene from the same three species as above, e.g.:
+
+```{r}
+muts
+```
+
+We can see that this table is quite sparse (many of the entries are missing), and that it is not very standardised at this point (different mutations are specified in different ways). This is where the `fillMutationsTable` function can help. To run it, we need to supply it with 1) the mutations table, 2) a table specifying reference sequences, 3) the reference sequences themselves, and 4) a list of coordinates. We already have 1) as well as 3) and 4) from the previous section. 
+
+```{r, echo = FALSE, message = FALSE}
+refs <- readr::read_csv("../inst/extdata/reference_sequences.csv")
+```
+
+The table specifying the reference sequences needs to take the following shape:
+
+```{r}
+refs
+```
+
+This table is important to link the information about species, strains and genes in the mutations table to the appropriate reference sequences. The third column, "RefStrain" indicates whether or not the sequence can be used as a general reference for all strains of that species - if the value is FALSE then the reference will only be used if the strain name matches the one in the mutations table.
+
+We can now call the `fillMutationsTable` function:
+
+```{r}
+filledMuts <- fillMutationsTable(muts, refs, seqs, coordinates)
+filledMuts
+```
 
 ## Calling variants in Sanger sequencing data
 

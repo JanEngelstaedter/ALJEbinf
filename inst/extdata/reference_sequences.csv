@@ -1,0 +1,4 @@
+﻿Species,Strain,RefStrain,Gene,FASTA_name
+Mycobacterium tuberculosis,H37Rv,TRUE,rpoB,rpoB_Mycobacterium_tuberculosis_H37Rv
+Escherichia coli,MG1655,TRUE,rpoB,rpoB_Escherichia_coli_MG1655
+Acinetobacter baylyi,AB3,FALSE,rpoB,rpoB_Acinetobacter_baylyi_AB3

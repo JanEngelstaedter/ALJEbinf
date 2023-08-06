@@ -18,5 +18,7 @@ Imports:
     IRanges,
     DECIPHER,
     XVector,
-    svMisc
+    svMisc,
+    knitr
+VignetteBuilder: knitr
 RoxygenNote: 7.2.3
