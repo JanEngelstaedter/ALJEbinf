@@ -108,13 +108,13 @@ translateCoordinate <- function(pos,
   if (AAinput) {
     pos <- pos * 3L - 2L
   }
-  if(length(pos) > 1) {
+  if(length(pos) > 1L) {
     pos <- pos[1]
     warning("More than one position in pos vector, only the first one will be used.")
   }
   if (direction == "FocalToRef") {
     coordinates$posRef[duplicated(coordinates$posRef) |
-                           (coordinates$posRef == 0)] <- NA
+                           (coordinates$posRef == 0L)] <- NA
     trans <- coordinates |>
       dplyr::filter(posFocal == pos) |>
       dplyr::pull(posRef) |>

@@ -338,7 +338,7 @@ fillMutationsTableRow_Protein <- function(muts, k, refSeq_ID, seqs, coordinates)
   if (!is.na(muts$Nt_pos[k]) &&
       !is.na(muts$Codon_original[k]) &&
       !is.na(muts$Codon_mutation[k])) {
-    aa_pos <- (muts$Nt_pos[k] - 1) %/% 3 + 1
+    aa_pos <- (muts$Nt_pos[k] - 1L) %/% 3L + 1L
     aa_original <- as.character(Biostrings::translate(Biostrings::DNAString(muts$Codon_original[k]), no.init.codon = TRUE))
     aa_mutation <- as.character(Biostrings::translate(Biostrings::DNAString(muts$Codon_mutation[k]), no.init.codon = TRUE))
 

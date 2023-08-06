@@ -94,7 +94,8 @@ In this section we will cover the `fillMutationsTable` function, which is design
 The starting point is a table that must have exactly the following columns:
 
 ```{r, echo = FALSE, message = FALSE}
-muts <- readr::read_csv("../inst/extdata/mutations.csv")
+muts <- readr::read_csv("../inst/extdata/mutations.csv",
+                        col_types = readr::cols(.default = "c"))
 columns <- data.frame(Column = names(muts),
                       Description = c("Name of species",
                                       "Strain name (if any)",
@@ -166,7 +167,7 @@ filledMuts |> select(Nt_OtoM:Codon_OtoM)
 filledMuts |> select(AA_pos:AA_mut_name_Ecoli)
 ```
 
-(The mutation in the 5th row could not be completed because no nucleotide information was available.)
+(The mutation in the 4th row could not be completed because no nucleotide information was available.)
 
 ## Calling variants in Sanger sequencing data
 
