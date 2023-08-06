@@ -20,7 +20,7 @@ isPointMutation <- function(muts, k) {
   if (!is.na(muts$Nt_OtoM[k])) {
     if (!stringr::str_detect(muts$Nt_OtoM[k], " -> "))
       pointMut <- FALSE
-    nts <- stringr::str_split(muts$Nt_OtoM[k], pattern = fixed(" -> "))[[1]]
+    nts <- stringr::str_split(muts$Nt_OtoM[k], pattern = stringr::fixed(" -> "))[[1]]
     if ((length(nts) != 2L) || (nchar(nts[1]) != 1L) || (nchar(nts[2]) != 1L))
       pointMut <- FALSE
   }
