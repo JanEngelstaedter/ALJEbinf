@@ -252,6 +252,80 @@ fillMutationsTableRow_DNA <- function(muts, k, refSeq_ID, seqs, coordinates) {
           warning(paste0("Codon_mutation column not consistent with Codon_OtoM column in row ", k, "."))
       }
     }
+
+    # filling in Nt_original, Nt_mutation and Nt_pos from Codon and AA_pos:
+    if (!is.na(muts$Codon_original[k]) &&
+        !is.na(muts$Codon_mutation[k]) &&
+        !is.na(muts$AA_pos[k])) {
+      nts_original <- stringr::str_split(muts$Codon_original[k], "")[[1]]
+      nts_mutation <- stringr::str_split(muts$Codon_mutation[k], "")[[1]]
+      if (sum(nts_original != nts_mutation) == 1) { # one nucleotide difference?
+        Nt_pos <- (3 * muts$AA_pos[k]) - 3 + which(nts_original != nts_mutation)
+        Nt_original <- nts_original[nts_original != nts_mutation]
+        Nt_mutation <- nts_mutation[nts_original != nts_mutation]
+
+        if (is.na(muts$Nt_pos[k])) {
+          muts$Nt_pos[k] <- Nt_pos
+        } else {
+          if (muts$Nt_pos[k] != Nt_pos)
+            warning(paste0("Nt_pos column not consistent with codons and AA_pos position in row ", k, "."))
+        }
+        if (is.na(muts$Nt_original[k])) {
+          muts$Nt_original[k] <- Nt_original
+        } else {
+          if (muts$Nt_original[k] != Nt_original)
+            warning(paste0("Nt_original column not consistent with codons and AA_pos column in row ", k, "."))
+        }
+        if (is.na(muts$Nt_mutation[k])) {
+          muts$Nt_mutation[k] <- Nt_mutation
+        } else {
+          if (muts$Nt_mutation[k] != Nt_mutation)
+            warning(paste0("Nt_mutation column not consistent with codons and AA_pos column in row ", k, "."))
+        }
+      }
+      else if ((sum(nts_original != nts_mutation) == 0)) {
+        warning(paste0("No nucleotide differences between Codon_original and Codon_mutation in row ", k, "."))
+      } else {
+        warning(paste0("More than one nucleotide differences between Codon_original and Codon_mutation in row ", k, "."))
+      }
+    }
+
+    # filling in Nt_original, Nt_mutation and Nt_pos from Codon and AA_pos:
+    if (!is.na(muts$Codon_original[k]) &&
+        !is.na(muts$Codon_mutation[k]) &&
+        !is.na(muts$AA_pos_Ecoli[k])) {
+      nts_original <- stringr::str_split(muts$Codon_original[k], "")[[1]]
+      nts_mutation <- stringr::str_split(muts$Codon_mutation[k], "")[[1]]
+      if (sum(nts_original != nts_mutation) == 1) { # one nucleotide difference?
+        Nt_pos_Ecoli <- (3 * muts$AA_pos_Ecoli[k]) - 3 + which(nts_original != nts_mutation)
+        Nt_original <- nts_original[nts_original != nts_mutation]
+        Nt_mutation <- nts_mutation[nts_original != nts_mutation]
+
+        if (is.na(muts$Nt_pos_Ecoli[k])) {
+          muts$Nt_pos_Ecoli[k] <- Nt_pos_Ecoli
+        } else {
+          if (muts$Nt_pos_Ecoli[k] != Nt_pos_Ecoli)
+            warning(paste0("Nt_pos_Ecoli column not consistent with codons and AA_pos position in row ", k, "."))
+        }
+        if (is.na(muts$Nt_original[k])) {
+          muts$Nt_original[k] <- Nt_original
+        } else {
+          if (muts$Nt_original[k] != Nt_original)
+            warning(paste0("Nt_original column not consistent with codons and AA_pos column in row ", k, "."))
+        }
+        if (is.na(muts$Nt_mutation[k])) {
+          muts$Nt_mutation[k] <- Nt_mutation
+        } else {
+          if (muts$Nt_mutation[k] != Nt_mutation)
+            warning(paste0("Nt_mutation column not consistent with codons and AA_pos column in row ", k, "."))
+        }
+      }
+      else if ((sum(nts_original != nts_mutation) == 0)) {
+        warning(paste0("No nucleotide differences between Codon_original and Codon_mutation in row ", k, "."))
+      } else {
+        warning(paste0("More than one nucleotide differences between Codon_original and Codon_mutation in row ", k, "."))
+      }
+    }
   }
   return(muts)
 }

@@ -27,6 +27,7 @@ Suppose we have DNA sequences of homologous genes from different species of bact
 
 ```{r, eval=FALSE}
 library(Biostrings)
+library(dplyr)
 library(ALJEbinf)
 seqs <- readDNAStringSet("./data/rpoB_references.fasta")
 seqs
@@ -34,6 +35,7 @@ seqs
 
 ```{r, echo=FALSE, message=FALSE}
 library(Biostrings)
+library(dplyr)
 library(ALJEbinf)
 seqs <- readDNAStringSet("../inst/extdata/rpoB_references.fasta")
 seqs
@@ -120,15 +122,23 @@ columns <- data.frame(Column = names(muts),
 knitr::kable(columns)
 ```
 
-(The table could contain many NAs in those columns though, and can also contain additional column.)
+(The table could contain additional columns as well though.)
 
-Suppose we have such a table of mutations in the rpoB gene from the same three species as above, e.g.:
+Suppose we have such a table of mutations in the rpoB gene from the same three species as above:
 
 ```{r}
 muts
 ```
 
-We can see that this table is quite sparse (many of the entries are missing), and that it is not very standardised at this point (different mutations are specified in different ways). This is where the `fillMutationsTable` function can help. To run it, we need to supply it with 1) the mutations table, 2) a table specifying reference sequences, 3) the reference sequences themselves, and 4) a list of coordinates. We already have 1) as well as 3) and 4) from the previous section. 
+Since this table has too many columns to display at once, we will break it down into groups:
+
+```{r}
+muts |> select(Species:Nt_mutation)
+muts |> select(Nt_OtoM:Codon_OtoM)
+muts |> select(AA_pos:AA_mut_name_Ecoli)
+```
+
+We can see that this table is quite sparse (many of the entries are missing), and that it is not very standardised at this point (different mutations are specified in different ways). This is where the `fillMutationsTable` function can help. To run it, we need to supply it with 1) the mutations table, 2) a table specifying reference sequences, 3) the reference sequences themselves, and 4) a list of coordinates. We already have 1) as well as 3) and 4) from the previous section.
 
 ```{r, echo = FALSE, message = FALSE}
 refs <- readr::read_csv("../inst/extdata/reference_sequences.csv")
@@ -145,9 +155,18 @@ This table is important to link the information about species, strains and genes
 We can now call the `fillMutationsTable` function:
 
 ```{r}
-filledMuts <- fillMutationsTable(muts, refs, seqs, coordinates)
-filledMuts
+filledMuts <- fillMutationsTable(muts, refs, seqs, allCoords)
 ```
+
+As the result shows, this table is now completed as much as possible:
+
+```{r}
+filledMuts |> select(Species:Nt_mutation)
+filledMuts |> select(Nt_OtoM:Codon_OtoM)
+filledMuts |> select(AA_pos:AA_mut_name_Ecoli)
+```
+
+(The mutation in the 5th row could not be completed because no nucleotide information was available.)
 
 ## Calling variants in Sanger sequencing data
 
