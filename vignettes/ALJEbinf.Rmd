@@ -1,7 +1,5 @@
 ---
 title: "ALJEbinf: bioinformatics tools for the Engelstaedter/Letten lab"
-author: "Jan Engelstaedter"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{ALJEbinf}
@@ -14,10 +12,13 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+
+# Note: To knit this vignette locally, replace "./vignettes/" paths with "./"
+
+```
+
+```{r setup}
 library(ALJEbinf)
-
-# Note: To knit this vignette locally, replace "./extdata/" paths with ""./extdata/"
-
 ```
 
 ## Introduction
@@ -32,7 +33,7 @@ Suppose we have DNA sequences of homologous genes from different species of bact
 library(Biostrings)
 library(dplyr)
 library(ALJEbinf)
-seqs <- readDNAStringSet("./data/rpoB_references.fasta")
+seqs <- readDNAStringSet("./rpoB_references.fasta")
 seqs
 ```
 
@@ -40,7 +41,7 @@ seqs
 library(Biostrings)
 library(dplyr)
 library(ALJEbinf)
-seqs <- readDNAStringSet("./extdata/rpoB_references.fasta")
+seqs <- readDNAStringSet("./rpoB_references.fasta")
 seqs
 ```
 
@@ -97,7 +98,7 @@ In this section we will cover the `fillMutationsTable` function, which is design
 The starting point is a table that must have exactly the following columns:
 
 ```{r, echo = FALSE, message = FALSE}
-muts <- readr::read_csv("./extdata/mutations.csv",
+muts <- readr::read_csv("./mutations.csv",
                         col_types = readr::cols(.default = "c"))
 columns <- data.frame(Column = names(muts),
                       Description = c("Name of species",
@@ -145,7 +146,7 @@ muts |> select(AA_pos:AA_mut_name_Ecoli)
 We can see that this table is quite sparse (many of the entries are missing), and that it is not very standardised at this point (different mutations are specified in different ways). This is where the `fillMutationsTable` function can help. To run it, we need to supply it with 1) the mutations table, 2) a table specifying reference sequences, 3) the reference sequences themselves, and 4) a list of coordinates. We already have 1) as well as 3) and 4) from the previous section.
 
 ```{r, echo = FALSE, message = FALSE}
-refs <- readr::read_csv("./extdata/reference_sequences.csv")
+refs <- readr::read_csv("./reference_sequences.csv")
 ```
 
 The table specifying the reference sequences needs to take the following shape:
@@ -187,7 +188,7 @@ In this workflow, we would like to use Sanger sequencing to determine which vari
 The sample key is a data frame that needs to have (at least) the following columns:
 
 ```{r, echo = FALSE, message = FALSE}
-sampleKey <- readr::read_csv("./extdata/sample_key.csv",
+sampleKey <- readr::read_csv("./sample_key.csv",
                              col_types = readr::cols(.default = "c"))
 columns <- data.frame(Column = names(sampleKey),
                       Description = c("A unique identifier for each sample (DNA template)",
@@ -219,9 +220,9 @@ variants <- callSangerVariants_fasta(sampleKey_file = "./data/sample_key.csv",
 ```
 
 ```{r, echo=FALSE}
-variants <- callSangerVariants_fasta(sampleKey_file = "./extdata/sample_key.csv",
-                                     fasta_path = "./extdata/",
-                                     reference_files = "./extdata/rpoB_references.fasta")
+variants <- callSangerVariants_fasta(sampleKey_file = "./sample_key.csv",
+                                     fasta_path = "./",
+                                     reference_files = "./rpoB_references.fasta")
 ```
 
 The resulting object `variants` is a list containing two data frames. The first one provides a summary of how many variants of different types were detected for each sample. The first columns of this table reflect the sample key:
