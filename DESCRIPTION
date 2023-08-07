@@ -19,6 +19,9 @@ Imports:
     DECIPHER,
     XVector,
     svMisc,
-    knitr
-VignetteBuilder: knitr
+    knitr,
+    rmarkdown
+VignetteBuilder: 
+    knitr,
+    rmarkdown
 RoxygenNote: 7.2.3
