@@ -148,7 +148,7 @@ callSangerVariants_fasta <- function(sampleKey_file,
     }
   }
   variantsDetails <- variantsDetails[1:(j - 1),] |>
-    select(-Success)
+    select(-Success, -RefSeq_ID)
   return(list(summary = variantsSummary,
               details = variantsDetails))
 }
