@@ -1,0 +1,9 @@
+﻿SampleID,Species,Strain,Gene,Primer,FileName,Success,Reference
+R01B2,Escherichia coli,MG1655,rpoB,rpoB_FW,R01B2_A01,TRUE,rpoB_Escherichia_coli_MG1655
+R01B11,Escherichia coli,MG1655,rpoB,rpoB_FW,R01B11_A02,TRUE,rpoB_Escherichia_coli_MG1655
+R01C11,Escherichia coli,MG1655,rpoB,rpoB_FW,R01C11_A03,TRUE,rpoB_Escherichia_coli_MG1655
+R01D2,Escherichia coli,MG1655,rpoB,rpoB_FW,R01D2_A04,TRUE,rpoB_Escherichia_coli_MG1655
+R01D11,Escherichia coli,MG1655,rpoB,rpoB_FW,R01D11_A05,TRUE,rpoB_Escherichia_coli_MG1655
+R01E4,Escherichia coli,MG1655,rpoB,rpoB_FW,R01E4_A06,TRUE,rpoB_Escherichia_coli_MG1655
+R01F2,Escherichia coli,MG1655,rpoB,rpoB_FW,R01F2_A07,TRUE,rpoB_Escherichia_coli_MG1655
+R01F6,Escherichia coli,MG1655,rpoB,rpoB_FW,R01F6_A08,TRUE,rpoB_Escherichia_coli_MG1655

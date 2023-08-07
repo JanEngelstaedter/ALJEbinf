@@ -28,7 +28,7 @@ callSangerVariants_fasta <- function(sampleKey_file,
                                      hardTrim = c(0, 0)) {
 
   # read in, check and sort sampleKey:
-  sampleKey <- readr::read_csv(sampleKey_file)
+  sampleKey <- readr::read_csv(sampleKey_file, show_col_types = FALSE)
   if (!all(names(sampleKey)[1:8] == c("SampleID",
                                       "Species",
                                       "Strain",
@@ -73,12 +73,13 @@ callSangerVariants_fasta <- function(sampleKey_file,
                   nInsertions = NA,
                   nDeletions = NA)
 
-  variantsDetails <- data.frame(SampleID = rep(NA, 1000),  # make long data frame for more efficiency
+  variantsDetails <- data.frame(SampleID = rep(NA, 10000),  # make long data frame for more efficiency
                          Species = NA,
                          Strain = NA,
                          Gene = NA,
                          Primer = NA,
                          FileName = NA,
+                         Success = NA,
                          Reference = NA,
                          ContigLength = NA,
                          MapStart = NA,
@@ -116,7 +117,7 @@ callSangerVariants_fasta <- function(sampleKey_file,
     # fill in variantsSummary table:
     variantsSummary$ContigLength[i] <- length(contig)
     variantsSummary$MapStart[i] <- alig@subject@range@start
-    variantsSummary$MapEnd[i] <- alig@subject@range@start + alig@subject@range@width - 1
+    variantsSummary$MapEnd[i] <- alig@subject@range@end
     variantsSummary$nVariants[i] <- nrow(mismatches) +
       length(indels@insertion[[1]]) + length(indels@deletion[[1]])
     variantsSummary$nMismatches[i] <- nrow(mismatches)
@@ -127,7 +128,7 @@ callSangerVariants_fasta <- function(sampleKey_file,
     if (variantsSummary$nMismatches[i] > 0) { # any mismatches?
 
       for(k in 1:nrow(mismatches)) {
-        variantsDetails[j, 1:10] <- variantsSummary[i, 1:10] # same first columns
+        variantsDetails[j, 1:11] <- variantsSummary[i, 1:11] # same first columns
         variantsDetails$VariantType[j] <- "substitution"
         variantsDetails$Nt_pos[j] <- mismatches$SubjectStart[k]
         variantsDetails$Nt_original[j] <- mismatches$SubjectSubstring[k]
@@ -146,7 +147,8 @@ callSangerVariants_fasta <- function(sampleKey_file,
       }
     }
   }
-  variantsDetails <- variantsDetails[1:(j - 1),]
+  variantsDetails <- variantsDetails[1:(j - 1),] |>
+    select(-Success)
   return(list(summary = variantsSummary,
               details = variantsDetails))
 }

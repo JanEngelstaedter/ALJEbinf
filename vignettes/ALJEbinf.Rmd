@@ -169,5 +169,73 @@ filledMuts |> select(AA_pos:AA_mut_name_Ecoli)
 
 (The mutation in the 4th row could not be completed because no nucleotide information was available.)
 
+We can also use the `mutationsTableSummary` function to gain some overall information about the created mutations table:
+
+```{r}
+mutationsTableSummary(filledMuts)
+```
+
+The difference between the last two statistics is that the number of unique orthologous AA mutations only counts mutations as separate that are not orthologous to existing mutations in other species (achieved using the E. coli position information).
+
 ## Calling variants in Sanger sequencing data
 
+In this workflow, we would like to use Sanger sequencing to determine which variants are present in a set of bacterial samples, which typically could be mutants obtained in a mutant screen. We need the following data: 1) fasta files containing called sequences for all samples, 2) a sample key linking fasta files to sample information, and 3) one or more reference sequences for comparison with wildtype bacteria.
+
+The sample key is a data frame that needs to have (at least) the following columns:
+
+```{r, echo = FALSE, message = FALSE}
+sampleKey <- readr::read_csv("../inst/extdata/sample_key.csv",
+                             col_types = readr::cols(.default = "c"))
+columns <- data.frame(Column = names(sampleKey),
+                      Description = c("A unique identifier for each species",
+                                      "Name of species",
+                                      "Strain name (if any)",
+                                      "What gene has been amplified?",
+                                      "Name of the primer used in PCR reaction and sequencing",
+                                      "Name of fasta file (without extension)",
+                                      "Whether or not the sequencing was successful; TRUE or FALSE",
+                                      "ID of the reference sequence"))
+```
+
+```{r}
+knitr::kable(columns)
+```
+
+Suppose we have our fasta files within a folder "./data/fasta", a fasta file of reference sequences (same rpoB sequences as in the previous section), and a file "./data/sample_key.csv" containing the following following sample key:
+
+```{r}
+sampleKey
+```
+
+We can now use the function `callSangerVariants_fasta` to determine which variants there are in our Sanger data:
+
+```{r, eval=FALSE}
+variants <- callSangerVariants_fasta(sampleKey_file = "./data/sample_key.csv",
+                                     fasta_path = "./data/fasta/",
+                                     reference_files = "./data/rpoB_references.fasta")
+```
+
+```{r, echo=FALSE}
+variants <- callSangerVariants_fasta(sampleKey_file = "../inst/extdata/sample_key.csv",
+                                     fasta_path = "../inst/extdata/",
+                                     reference_files = "../inst/extdata/rpoB_references.fasta")
+```
+
+The resulting object `variants` is a list containing two data frames. The first one provides a summary of how many variants of different types were detected for each sample. The first columns of this table reflect the sample key:
+
+```{r}
+variants$summary |> select(SampleID:Reference)
+```
+
+The remaining columns show the results of the variant calling:
+
+```{r}
+variants$summary |> select(ContigLength:nDeletions)
+```
+
+The second data frame contains more detailed information about each variant:
+
+```{r}
+variants$details
+```
+The naming of the columns here is consistant with that used by the `fillMutationsTable` function (see previous section).
