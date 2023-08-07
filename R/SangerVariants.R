@@ -117,7 +117,7 @@ callSangerVariants_fasta <- function(sampleKey_file,
     # fill in variantsSummary table:
     variantsSummary$ContigLength[i] <- length(contig)
     variantsSummary$MapStart[i] <- alig@subject@range@start
-    variantsSummary$MapEnd[i] <- alig@subject@range@end
+    variantsSummary$MapEnd[i] <- alig@subject@range@start + alig@subject@range@width - 1
     variantsSummary$nVariants[i] <- nrow(mismatches) +
       length(indels@insertion[[1]]) + length(indels@deletion[[1]])
     variantsSummary$nMismatches[i] <- nrow(mismatches)
