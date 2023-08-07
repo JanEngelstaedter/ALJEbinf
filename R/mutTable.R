@@ -260,7 +260,7 @@ fillMutationsTableRow_DNA <- function(muts, k, refSeq_ID, seqs, coordinates) {
       nts_original <- stringr::str_split(muts$Codon_original[k], "")[[1]]
       nts_mutation <- stringr::str_split(muts$Codon_mutation[k], "")[[1]]
       if (sum(nts_original != nts_mutation) == 1) { # one nucleotide difference?
-        Nt_pos <- (3 * muts$AA_pos[k]) - 3 + which(nts_original != nts_mutation)
+        Nt_pos <- (3L * muts$AA_pos[k]) - 3L + which(nts_original != nts_mutation)
         Nt_original <- nts_original[nts_original != nts_mutation]
         Nt_mutation <- nts_mutation[nts_original != nts_mutation]
 
@@ -297,7 +297,7 @@ fillMutationsTableRow_DNA <- function(muts, k, refSeq_ID, seqs, coordinates) {
       nts_original <- stringr::str_split(muts$Codon_original[k], "")[[1]]
       nts_mutation <- stringr::str_split(muts$Codon_mutation[k], "")[[1]]
       if (sum(nts_original != nts_mutation) == 1) { # one nucleotide difference?
-        Nt_pos_Ecoli <- (3 * muts$AA_pos_Ecoli[k]) - 3 + which(nts_original != nts_mutation)
+        Nt_pos_Ecoli <- (3L * muts$AA_pos_Ecoli[k]) - 3L + which(nts_original != nts_mutation)
         Nt_original <- nts_original[nts_original != nts_mutation]
         Nt_mutation <- nts_mutation[nts_original != nts_mutation]
 
