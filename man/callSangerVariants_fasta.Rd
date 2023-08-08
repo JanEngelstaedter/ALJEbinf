@@ -7,8 +7,8 @@
 callSangerVariants_fasta(
   sampleKey_file,
   fasta_path,
-  fasta_extension = ".fa",
   reference_files,
+  fasta_extension = ".fa",
   hardTrim = c(0, 0)
 )
 }
@@ -26,9 +26,9 @@ This table must have the following columns:
 
 \item{fasta_path}{The path where the fasta files are located.}
 
-\item{fasta_extension}{File extension of the fasta files, usually either ".fa" (default) or ".fasta".}
-
 \item{reference_files}{The path and file name(s) of the fasta file(s) with the reference sequences}
+
+\item{fasta_extension}{File extension of the fasta files, usually either ".fa" (default) or ".fasta".}
 
 \item{hardTrim}{A vector specifying how many nucleotides on each side of a sequence should be hard-trimmed.}
 }

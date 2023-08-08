@@ -11,7 +11,7 @@ fillMutationsTable(muts, refs, seqs, coordinates)
 
 \item{refs}{A table specifying the species and names for all reference sequences.}
 
-\item{seqs}{Reference sequences as a DNAStringSet object, with names as specified in refs.}
+\item{seqs}{Reference sequences as a DNAStringSet object, with names as specified in `refs`.}
 
 \item{coordinates}{A list of coordinates, with names corresponding to seqs.}
 }
