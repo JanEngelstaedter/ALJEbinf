@@ -37,7 +37,7 @@ callSangerVariants_fasta <- function(sampleKey_file,
                                       "FileName",
                                       "Success",
                                       "Reference"))) {
-    stop("Columns in sampleKey file don't confirm to what is expected - refer to documentation.")
+    stop("Columns in sampleKey file don't conform to what is expected - refer to documentation.")
   }
   sampleKey <- sampleKey |>
     dplyr::arrange(Gene, SampleID)
@@ -103,6 +103,7 @@ callSangerVariants_fasta <- function(sampleKey_file,
                          AA_mut_name = NA,
                          AA_mut_name_Ecoli = NA)
 
+  cat("\nProcessing samples.\n")
   j <- 1 # tracker for row in variantsDetails table
   for(i in (1:nrow(sampleKey))[sampleKey$Success]) {
     svMisc::progress(i, progress.bar = TRUE, max.value = nrow(sampleKey))
@@ -148,7 +149,7 @@ callSangerVariants_fasta <- function(sampleKey_file,
     }
   }
   variantsDetails <- variantsDetails[1:(j - 1),] |>
-    select(-Success, -RefSeq_ID)
+    dplyr::select(-Success, -RefSeq_ID)
   return(list(summary = variantsSummary,
               details = variantsDetails))
 }
