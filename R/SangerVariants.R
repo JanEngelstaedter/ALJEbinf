@@ -13,8 +13,8 @@
 #' * Success: whether or not the sequencing was successful (TRUE or FALSE)
 #' * Reference: the name of the corresponding reference sequence
 #' @param fasta_path The path where the fasta files are located.
-#' @param fasta_extension File extension of the fasta files, usually either ".fa" (default) or ".fasta".
 #' @param reference_files The path and file name(s) of the fasta file(s) with the reference sequences
+#' @param fasta_extension File extension of the fasta files, usually either ".fa" (default) or ".fasta".
 #' @param hardTrim A vector specifying how many nucleotides on each side of a sequence should be hard-trimmed.
 #'
 #' @return A list containing two tables: "summary" list the number of variants of different types detected for each sample,
@@ -23,8 +23,8 @@
 #'
 callSangerVariants_fasta <- function(sampleKey_file,
                                      fasta_path,
-                                     fasta_extension = ".fa",
                                      reference_files,
+                                     fasta_extension = ".fa",
                                      hardTrim = c(0, 0)) {
 
   # read in, check and sort sampleKey:
