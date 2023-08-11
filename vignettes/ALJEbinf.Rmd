@@ -225,21 +225,18 @@ variants <- callSangerVariants_fasta(sampleKey_file = "./sample_key.csv",
                                      reference_files = "./rpoB_references.fasta")
 ```
 
-The resulting object `variants` is a list containing two data frames. The first one provides a summary of how many variants of different types were detected for each sample. The first columns of this table reflect the sample key:
+The resulting object `variants` is a list containing two data frames. The first one provides a summary of how many variants of different types were detected for each sample: 
 
 ```{r}
-variants$summary |> select(Sample_ID:Reference)
+variants$summary
 ```
 
-The remaining columns show the results of the variant calling:
+The first columns of this table reflect the sample key, whereas the remaining columns indicate the length of the sequence that was mapped to the reference (Contig_length), where it mapped (Map_start and Map_end), how many variants were detected (in total and of different type: n_<xxx> columns), and what variants there were at the nucleotide level (Nt_variants).
 
-```{r}
-variants$summary |> select(Contig_length:n_deletions)
-```
-
-The second data frame contains more detailed information about each variant:
+The second data frame contains more detailed information about each variant, including translations to amino acid level and into E. coli coordinates:
 
 ```{r}
 variants$details
 ```
+
 The naming of the columns here is consistant with that used by the `fillMutationsTable` function (see previous section).
