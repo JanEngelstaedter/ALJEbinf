@@ -160,6 +160,7 @@ callSangerVariants_fasta <- function(sampleKey_file,
     dplyr::group_by(dplyr::across(tidyselect::all_of(requiredSampleKeyColumns))) |>
     dplyr::summarise(Nt_variants = paste(Nt_mut_name, collapse = ", ")) |>
     dplyr::right_join(variantsSummary) |>
+    dplyr::ungroup() |>
     dplyr::relocate(Nt_variants, .after = last_col())
   return(list(summary = variantsSummary,
               details = variantsDetails))
