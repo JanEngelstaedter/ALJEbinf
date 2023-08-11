@@ -228,13 +228,13 @@ variants <- callSangerVariants_fasta(sampleKey_file = "./sample_key.csv",
 The resulting object `variants` is a list containing two data frames. The first one provides a summary of how many variants of different types were detected for each sample. The first columns of this table reflect the sample key:
 
 ```{r}
-variants$summary |> select(SampleID:Reference)
+variants$summary |> select(Sample_ID:Reference)
 ```
 
 The remaining columns show the results of the variant calling:
 
 ```{r}
-variants$summary |> select(ContigLength:nDeletions)
+variants$summary |> select(Contig_length:n_deletions)
 ```
 
 The second data frame contains more detailed information about each variant:

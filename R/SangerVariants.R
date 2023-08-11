@@ -15,7 +15,7 @@
 #' @param fasta_path The path where the fasta files are located.
 #' @param reference_files The path and file name(s) of the fasta file(s) with the reference sequences
 #' @param fasta_extension File extension of the fasta files, usually either ".fa" (default) or ".fasta".
-#' @param hardTrim A vector specifying how many nucleotides on each side of a sequence should be hard-trimmed.
+#' @param hard_trim A vector specifying how many nucleotides on each side of a sequence should be hard-trimmed.
 #'
 #' @return A list containing two tables: "summary" list the number of variants of different types detected for each sample,
 #' whereas "details" provides detailed information for each variant.
@@ -25,30 +25,36 @@ callSangerVariants_fasta <- function(sampleKey_file,
                                      fasta_path,
                                      reference_files,
                                      fasta_extension = ".fa",
-                                     hardTrim = c(0, 0)) {
+                                     hard_trim = c(0, 0)) {
 
   # read in, check and sort sampleKey:
   sampleKey <- readr::read_csv(sampleKey_file, show_col_types = FALSE)
-  if (!all(names(sampleKey)[1:8] == c("SampleID",
-                                      "Species",
-                                      "Strain",
-                                      "Gene",
-                                      "Primer",
-                                      "FileName",
-                                      "Success",
-                                      "Reference"))) {
+  if (!("Success" %in% names(sampleKey))) { # add success column if not there
+    sampleKey |> mutate(Success = TRUE)
+  }
+  requiredSampleKeyColumns <- c("Sample_ID",
+                                "Species",
+                                "Strain",
+                                "Gene",
+                                "Primer",
+                                "File_name",
+                                "Success",
+                                "Reference")
+  if (!all(names(sampleKey) %in% requiredSampleKeyColumns)) {
     stop("Columns in sampleKey file don't conform to what is expected - refer to documentation.")
   }
   sampleKey <- sampleKey |>
-    dplyr::arrange(Gene, SampleID)
+    dplyr::select(all_of(requiredSampleKeyColumns),
+                  tidyselect::everything()) |>
+    dplyr::arrange(Gene, Primer, Sample_ID)
 
   # read in and prepare fasta files for samples:
   fastaFileNames <- paste0(fasta_path,
-                           sampleKey$FileName[sampleKey$Success],
+                           sampleKey$File_name[sampleKey$Success],
                            fasta_extension)
   sampleSeqs <- Biostrings::readDNAStringSet(fastaFileNames) |>
     DECIPHER::RemoveGaps() |>
-    XVector::subseq(hardTrim[1] + 1, -hardTrim[2] - 1) # trim base pairs on both sides
+    XVector::subseq(hard_trim[1] + 1, -hard_trim[2] - 1) # trim base pairs on both sides
 
   # read in and prepare reference sequences:
   referenceSeqs <- Biostrings::readDNAStringSet(reference_files)
@@ -65,26 +71,26 @@ callSangerVariants_fasta <- function(sampleKey_file,
 
   # prepare variants data frames:
   variantsSummary <- sampleKey |>
-    dplyr::mutate(ContigLength = NA,
-                  MapStart = NA,
-                  MapEnd = NA,
-                  nVariants = NA,
-                  nMismatches = NA,
-                  nInsertions = NA,
-                  nDeletions = NA)
+    dplyr::mutate(Contig_length = NA,
+                  Map_start = NA,
+                  Map_end = NA,
+                  n_variants = NA,
+                  n_mismatches = NA,
+                  n_insertions = NA,
+                  n_deletions = NA)
 
-  variantsDetails <- data.frame(SampleID = rep(NA, 10000),  # make long data frame for more efficiency
+  variantsDetails <- data.frame(Sample_ID = rep(NA, 10000),  # make long data frame for more efficiency
                          Species = NA,
                          Strain = NA,
                          Gene = NA,
                          Primer = NA,
-                         FileName = NA,
+                         File_name = NA,
                          Success = NA,
                          Reference = NA,
-                         ContigLength = NA,
-                         MapStart = NA,
-                         MapEnd = NA,
-                         VariantType = NA,
+                         Contig_length = NA,
+                         Map_start = NA,
+                         Map_end = NA,
+                         Variant_type = NA,
                          Nt_pos = NA,
                          Nt_pos_Ecoli = NA,
                          Nt_original = NA,
@@ -109,28 +115,28 @@ callSangerVariants_fasta <- function(sampleKey_file,
     svMisc::progress(i, progress.bar = TRUE, max.value = nrow(sampleKey))
 
     # mapping of contig to reference:
-    contig <- sampleSeqs[[sampleKey$FileName[i]]]
+    contig <- sampleSeqs[[sampleKey$File_name[i]]]
     ref <- referenceSeqs[[sampleKey$Reference[i]]]
     alig <- Biostrings::pairwiseAlignment(contig, ref, type = "local")
     mismatches <- Biostrings::mismatchTable(alig)
     indels <- Biostrings::indel(alig)
 
     # fill in variantsSummary table:
-    variantsSummary$ContigLength[i] <- length(contig)
-    variantsSummary$MapStart[i] <- alig@subject@range@start
-    variantsSummary$MapEnd[i] <- alig@subject@range@start + alig@subject@range@width - 1
-    variantsSummary$nVariants[i] <- nrow(mismatches) +
+    variantsSummary$Contig_length[i] <- length(contig)
+    variantsSummary$Map_start[i] <- alig@subject@range@start
+    variantsSummary$Map_end[i] <- alig@subject@range@start + alig@subject@range@width - 1
+    variantsSummary$n_variants[i] <- nrow(mismatches) +
       length(indels@insertion[[1]]) + length(indels@deletion[[1]])
-    variantsSummary$nMismatches[i] <- nrow(mismatches)
-    variantsSummary$nInsertions[i] <- length(indels@insertion[[1]])
-    variantsSummary$nDeletions[i] <- length(indels@deletion[[1]])
+    variantsSummary$n_mismatches[i] <- nrow(mismatches)
+    variantsSummary$n_insertions[i] <- length(indels@insertion[[1]])
+    variantsSummary$n_deletions[i] <- length(indels@deletion[[1]])
 
     # fill in variantsDetails table:
-    if (variantsSummary$nMismatches[i] > 0) { # any mismatches?
+    if (variantsSummary$n_mismatches[i] > 0) { # any mismatches?
 
       for(k in 1:nrow(mismatches)) {
         variantsDetails[j, 1:11] <- variantsSummary[i, 1:11] # same first columns
-        variantsDetails$VariantType[j] <- "substitution"
+        variantsDetails$Variant_type[j] <- "substitution"
         variantsDetails$Nt_pos[j] <- mismatches$SubjectStart[k]
         variantsDetails$Nt_original[j] <- mismatches$SubjectSubstring[k]
         variantsDetails$Nt_mutation[j] <- mismatches$PatternSubstring[k]
@@ -148,8 +154,12 @@ callSangerVariants_fasta <- function(sampleKey_file,
       }
     }
   }
-  variantsDetails <- variantsDetails[1:(j - 1),] |>
-    dplyr::select(-Success, -RefSeq_ID)
+  variantsDetails <- variantsDetails[1:(j - 1),]
+  variantsSummary <- variantsDetails |>
+    dplyr::group_by(dplyr::across(tidyselect::all_of(requiredSampleKeyColumns))) |>
+    dplyr::summarise(Nt_variants = paste(Nt_mut_name, collapse = ", ")) |>
+    dplyr::right_join(variantsSummary) |>
+    dplyr::relocate(Nt_variants, .after = last_col())
   return(list(summary = variantsSummary,
               details = variantsDetails))
 }

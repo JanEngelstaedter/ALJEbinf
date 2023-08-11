@@ -9,7 +9,7 @@ callSangerVariants_fasta(
   fasta_path,
   reference_files,
   fasta_extension = ".fa",
-  hardTrim = c(0, 0)
+  hard_trim = c(0, 0)
 )
 }
 \arguments{
@@ -30,7 +30,7 @@ This table must have the following columns:
 
 \item{fasta_extension}{File extension of the fasta files, usually either ".fa" (default) or ".fasta".}
 
-\item{hardTrim}{A vector specifying how many nucleotides on each side of a sequence should be hard-trimmed.}
+\item{hard_trim}{A vector specifying how many nucleotides on each side of a sequence should be hard-trimmed.}
 }
 \value{
 A list containing two tables: "summary" list the number of variants of different types detected for each sample,
