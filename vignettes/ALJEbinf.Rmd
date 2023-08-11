@@ -17,10 +17,6 @@ knitr::opts_chunk$set(
 
 ```
 
-```{r setup}
-library(ALJEbinf)
-```
-
 ## Introduction
 
 This package is meant as a toolbox for common bioinformatics workflows carried out within the Engelstaedter/Letten groups at The University of Queensland. This includes in particular working with DNA sequence data derived from antibiotic resistant bacteria as well as experimental evolution studies. Currently, three kinds of tasks are supported that will be discussed below: 1) obtaining and working with "coordinates", i.e. corresponding nucleotide or aminoacid positions within homologous sequences, 2) working with tables of observed mutations, and 3) calling variants in Sanger sequencing data.
@@ -29,15 +25,7 @@ This package is meant as a toolbox for common bioinformatics workflows carried o
 
 Suppose we have DNA sequences of homologous genes from different species of bacteria. We may then be interested in which nucleotide or amino acid position in one species corresponds to which position in another species. As an example, let us consider the gene *rpoB* from three species: *Escherichia coli*, *Acinetobacter baylyi*, and *Mycobacterium tuberculosis*. We can first load the required packages and then import the three sequences from a fasta file:
 
-```{r, eval=FALSE}
-library(Biostrings)
-library(dplyr)
-library(ALJEbinf)
-seqs <- readDNAStringSet("./rpoB_references.fasta")
-seqs
-```
-
-```{r, echo=FALSE, message=FALSE}
+```{r, message=FALSE}
 library(Biostrings)
 library(dplyr)
 library(ALJEbinf)
@@ -201,7 +189,7 @@ columns <- data.frame(Column = names(sampleKey),
                                       "ID of the reference sequence"))
 ```
 
-```{r}
+```{r, echo=FALSE}
 knitr::kable(columns)
 ```
 
