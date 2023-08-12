@@ -171,7 +171,7 @@ The difference between the last two statistics is that the number of unique orth
 
 ## Calling variants in Sanger sequencing data
 
-In this workflow, we would like to use Sanger sequencing to determine which variants are present in a set of bacterial samples, which typically could be mutants obtained in a mutant screen. We need the following data: 1) fasta files containing called sequences for all samples, 2) a sample key linking fasta files to sample information, and 3) one or more reference sequences for comparison with wildtype bacteria.
+In this workflow, we would like to use Sanger sequencing data to determine which variants are present in a set of bacterial samples, which typically could be mutants obtained in a mutant screen. We need the following data: 1) fasta files containing called sequences for all samples, 2) a sample key linking fasta files to sample information, and 3) one or more reference sequences for comparison with wildtype bacteria.
 
 The sample key is a data frame that needs to have (at least) the following columns:
 

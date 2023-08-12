@@ -40,7 +40,7 @@ callSangerVariants_fasta <- function(sampleKey_file,
                                 "File_name",
                                 "Success",
                                 "Reference")
-  if (!all(names(sampleKey) %in% requiredSampleKeyColumns)) {
+  if (!all(requiredSampleKeyColumns %in% names(sampleKey))) {
     stop("Columns in sampleKey file don't conform to what is expected - refer to documentation.")
   }
   sampleKey <- sampleKey |>
