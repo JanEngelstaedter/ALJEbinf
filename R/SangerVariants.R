@@ -79,15 +79,7 @@ callSangerVariants_fasta <- function(sampleKey_file,
                   n_insertions = NA,
                   n_deletions = NA)
 
-  variantsDetails <- data.frame(Sample_ID = rep(NA, 10000),  # make long data frame for more efficiency
-                         Species = NA,
-                         Strain = NA,
-                         Gene = NA,
-                         Primer = NA,
-                         File_name = NA,
-                         Success = NA,
-                         Reference = NA,
-                         Contig_length = NA,
+  variantsDetails <- data.frame(Contig_length = rep(NA, 10000), # make long for efficiency
                          Map_start = NA,
                          Map_end = NA,
                          Variant_type = NA,
@@ -108,6 +100,10 @@ callSangerVariants_fasta <- function(sampleKey_file,
                          AA_OtoM = NA,
                          AA_mut_name = NA,
                          AA_mut_name_Ecoli = NA)
+  variantsDetails[, names(sampleKey)] <- NA
+  variantsDetals <- variantsDetails |>
+    dplyr::select(all_of(names(sampleKey)),
+                  tidyselect::everything())
 
   cat("\nProcessing samples.\n")
   j <- 1 # tracker for row in variantsDetails table
@@ -157,7 +153,7 @@ callSangerVariants_fasta <- function(sampleKey_file,
   variantsDetails <- variantsDetails[1:(j - 1),] |>
     select(-RefSeq_ID)
   variantsSummary <- variantsDetails |>
-    dplyr::group_by(dplyr::across(tidyselect::all_of(requiredSampleKeyColumns))) |>
+    dplyr::group_by(dplyr::across(tidyselect::all_of(names(sampleKey)))) |>
     dplyr::summarise(Nt_variants = paste(Nt_mut_name, collapse = ", ")) |>
     dplyr::right_join(variantsSummary) |>
     dplyr::ungroup() |>
