@@ -4,12 +4,12 @@
 #'
 #' @param sampleKey_file File name to a table specifying the samples.
 #' This table must have the following columns:
-#' * SampleID: a unique ID for each bacterial sample
+#' * Sample_ID: a unique ID for each bacterial sample
 #' * Species
 #' * Strain
 #' * Gene
 #' * Primer: the name of the primer used for the sequencing
-#' * FileName: the name of the fasta file (without file extension)
+#' * File_name: the name of the fasta file (without file extension)
 #' * Success: whether or not the sequencing was successful (TRUE or FALSE)
 #' * Reference: the name of the corresponding reference sequence
 #' @param fasta_path The path where the fasta files are located.
@@ -101,7 +101,7 @@ callSangerVariants_fasta <- function(sampleKey_file,
                          AA_mut_name = NA,
                          AA_mut_name_Ecoli = NA)
   variantsDetails[, names(sampleKey)] <- NA
-  variantsDetals <- variantsDetails |>
+  variantsDetails <- variantsDetails |>
     dplyr::select(all_of(names(sampleKey)),
                   tidyselect::everything())
 
