@@ -15,12 +15,12 @@ callSangerVariants_fasta(
 \arguments{
 \item{sampleKey_file}{File name to a table specifying the samples.
 This table must have the following columns:
-* SampleID: a unique ID for each bacterial sample
+* Sample_ID: a unique ID for each bacterial sample
 * Species
 * Strain
 * Gene
 * Primer: the name of the primer used for the sequencing
-* FileName: the name of the fasta file (without file extension)
+* File_name: the name of the fasta file (without file extension)
 * Success: whether or not the sequencing was successful (TRUE or FALSE)
 * Reference: the name of the corresponding reference sequence}
 

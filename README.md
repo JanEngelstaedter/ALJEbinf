@@ -19,5 +19,12 @@ R:
 
 ``` r
 install.packages("devtools")
-devtools::install_github("JanEngelstaedter/ALJEbinf")
+devtools::install_github("JanEngelstaedter/ALJEbinf", build_vignettes = TRUE)
+```
+
+Once installed, you can read the vignette to learn more about the
+package:
+
+``` r
+browseVignettes("ALJEbinf")
 ```
