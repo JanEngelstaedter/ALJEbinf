@@ -63,9 +63,11 @@ callSangerVariants_fasta <- function(sampleKey_file,
   genes <- unique(sampleKey$Gene)
   coordinates <- vector(mode = "list", length = length(genes))
   names(coordinates) <- genes
-  for(i in 1:length(genes)) {
-    refs <- referenceSeqs[unique(sampleKey$Reference[sampleKey$Gene == sampleKey$Gene[i]])]
+  for (i in 1:length(genes)) {
     ref_Ecoli <- paste0(genes[i], "_Escherichia_coli_MG1655")
+    refs <- referenceSeqs[unique(c(
+      ref_Ecoli,
+      sampleKey$Reference[sampleKey$Gene == sampleKey$Gene[i]]))]
     coordinates[[i]] <- getAllCoordinates(refs, ref_Ecoli)
   }
 
