@@ -131,7 +131,6 @@ callSangerVariants_fasta <- function(sampleKey_file,
 
     # fill in variantsDetails table:
     if (variantsSummary$n_mismatches[i] > 0) { # any mismatches?
-
       for(k in 1:nrow(mismatches)) {
         variantsDetails[j, 1:11] <- variantsSummary[i, 1:11] # same first columns
         variantsDetails$Variant_type[j] <- "substitution"
@@ -148,6 +147,21 @@ callSangerVariants_fasta <- function(sampleKey_file,
                                                          sampleKey$Reference[i],
                                                          referenceSeqs,
                                                          coordinates[[sampleKey$Gene[i]]])
+        j <- j + 1
+      }
+    }
+    if (variantsSummary$n_insertions[i] > 0) { # any insertions?
+      for(k in 1:length(indels@insertion[[1]])) {
+        variantsDetails[j, 1:11] <- variantsSummary[i, 1:11] # same first columns
+        variantsDetails$Variant_type[j] <- "insertion"
+        variantsDetails$Nt_pos[j] <- indels@insertion[[1]]@start[k]
+        variantsDetails$Nt_original[j] <- mismatches$SubjectSubstring[k]
+        variantsDetails$Nt_mutation[j] <- mismatches$PatternSubstring[k]
+        variantsDetails <- fillMutationsTableRow_DNA(variantsDetails,
+                                                     j,
+                                                     sampleKey$Reference[i],
+                                                     referenceSeqs,
+                                                     coordinates[[sampleKey$Gene[i]]])
         j <- j + 1
       }
     }

@@ -91,7 +91,10 @@ fillMutationsTableRow_DNA <- function(muts, k, refSeq_ID, seqs, coordinates) {
       Nt_pos_Ecoli <- translateCoordinate(muts$Nt_pos[k],
                                           coordinates[[refSeq_ID]],
                                           direction = "FocalToRef")
-      if (is.na(muts$Nt_pos_Ecoli[k])) {
+      if (is.na(Nt_pos_Ecoli)) {
+        warning(paste0("Nt_pos (", muts$Nt_pos[k], ", in row ", k, ") predicted to not exist in E. coli."))
+      }
+      else if (is.na(muts$Nt_pos_Ecoli[k])) {
         muts$Nt_pos_Ecoli[k] <- Nt_pos_Ecoli
       } else {
         if (muts$Nt_pos_Ecoli[k] != Nt_pos_Ecoli)
@@ -104,7 +107,10 @@ fillMutationsTableRow_DNA <- function(muts, k, refSeq_ID, seqs, coordinates) {
       Nt_pos <- translateCoordinate(muts$Nt_pos_Ecoli[k],
                                     coordinates[[refSeq_ID]],
                                     direction = "RefToFocal")
-      if (is.na(muts$Nt_pos[k])) {
+      if (is.na(Nt_pos)) {
+        warning(paste0("Nt_pos_Ecoli (", muts$Nt_pos_Ecoli[k], ", in row ", k, ") predicted to not exist in this species."))
+      }
+      else if (is.na(muts$Nt_pos[k])) {
         muts$Nt_pos[k] <- Nt_pos
       } else {
         if (muts$Nt_pos[k] != Nt_pos)
@@ -369,7 +375,10 @@ fillMutationsTableRow_Protein <- function(muts, k, refSeq_ID, seqs, coordinates)
                                   direction = "RefToFocal",
                                   AAinput = TRUE,
                                   AAoutput = TRUE)
-    if (is.na(muts$AA_pos[k])) {
+    if (is.na(aa_pos)) {
+      warning(paste0("AA_pos_Ecoli (", muts$AA_pos_Ecoli[k], ", in row ", k, ") predicted to not exist in this species."))
+    }
+    else if (is.na(muts$AA_pos[k])) {
       muts$AA_pos[k] <- aa_pos
     } else {
       if (muts$AA_pos[k] != aa_pos)
@@ -384,7 +393,10 @@ fillMutationsTableRow_Protein <- function(muts, k, refSeq_ID, seqs, coordinates)
                                         direction = "FocalToRef",
                                         AAinput = TRUE,
                                         AAoutput = TRUE)
-    if (is.na(muts$AA_pos_Ecoli[k])) {
+    if (is.na(aa_pos_Ecoli)) {
+      warning(paste0("AA_pos (", muts$AA_pos[k], ", in row ", k, ") predicted to not exist in E. coli."))
+    }
+    else if (is.na(muts$AA_pos_Ecoli[k])) {
       muts$AA_pos_Ecoli[k] <- aa_pos_Ecoli
     } else {
       if (muts$AA_pos_Ecoli[k] != aa_pos_Ecoli)
