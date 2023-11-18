@@ -55,7 +55,6 @@ isPointMutation <- function(muts, k) {
 
 # internal function to fill the DNA columns in a mutations table row:
 fillMutationsTableRow_DNA <- function(muts, k, refSeq_ID, seqs, coordinates) {
-  muts$RefSeq_ID[k] <- refSeq_ID
   for(i in 1:2) { # repeat filling to make sure all columns are captured
     # fill Nt_OtoM from Nt_original+Nt_mutation:
     if (!is.na(muts$Nt_original[k]) && !is.na(muts$Nt_mutation[k])) {
@@ -510,8 +509,8 @@ fillMutationsTable <- function(muts, refs, seqs, coordinates) {
       refSeq_ID <- NA
       # check if there are any mutations in that strain j and gene i:
       if ((muts |>
-             dplyr::filter(Gene == genes[i], Strain_ID == strainIDs[j]) |>
-             nrow()) > 0) {
+           dplyr::filter(Gene == genes[i], Strain_ID == strainIDs[j]) |>
+           nrow()) > 0) {
         geneStrain <- paste(genes[i], strainIDs[j], sep = "_")
         cat(paste0("Working on gene_species_strain ", geneStrain, ".\n"))
         # finding the appropriate reference sequence for the gene:
@@ -534,6 +533,7 @@ fillMutationsTable <- function(muts, refs, seqs, coordinates) {
       if (!is.na(refSeq_ID)) {
         for(k in 1:nrow(muts)) {
           if ((muts$Gene[k] == genes[i]) && (muts$Strain_ID[k] == strainIDs[j])) {
+            muts$RefSeq_ID[k] <- refSeq_ID
             if (isPointMutation(muts, k)) {
               muts <- fillMutationsTableRow_DNA(muts, k, refSeq_ID, seqs, coordinates)
               muts <- fillMutationsTableRow_Protein(muts, k, refSeq_ID, seqs, coordinates)
@@ -582,4 +582,17 @@ mutationsTableSummary <- function(muts) {
         unique() |>
         length(),
       "\n")
+
+  missingRefs <- muts |>
+    filter(is.na(RefSeq_ID)) |>
+    select(Gene, Strain_ID) |>
+    distinct(Gene, Strain_ID) |>
+    unite(Gene_Strain, Gene, Strain_ID, sep = "_") |>
+    pull(Gene_Strain)
+  if (length(missingRefs) > 0) {
+    cat("\n")
+    cat("No reference found for the following Gene_Species_Strain combinations:\n")
+    cat(paste(" ", missingRefs, sep = "", collapse = "\n"))
+    cat("\n\n")
+  }
 }
