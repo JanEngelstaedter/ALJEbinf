@@ -227,4 +227,4 @@ The second data frame contains more detailed information about each variant, inc
 variants$details
 ```
 
-The naming of the columns here is consistant with that used by the `fillMutationsTable` function (see previous section).
+The naming of the columns here is consistent with that used by the `fillMutationsTable` function (see previous section).

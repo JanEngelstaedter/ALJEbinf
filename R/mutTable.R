@@ -584,11 +584,11 @@ mutationsTableSummary <- function(muts) {
       "\n")
 
   missingRefs <- muts |>
-    filter(is.na(RefSeq_ID)) |>
-    select(Gene, Strain_ID) |>
-    distinct(Gene, Strain_ID) |>
-    unite(Gene_Strain, Gene, Strain_ID, sep = "_") |>
-    pull(Gene_Strain)
+    dplyr::filter(is.na(RefSeq_ID)) |>
+    dplyr::select(Gene, Strain_ID) |>
+    dplyr::distinct(Gene, Strain_ID) |>
+    tidyr::unite(Gene_Strain, Gene, Strain_ID, sep = "_") |>
+    dplyr::pull(Gene_Strain)
   if (length(missingRefs) > 0) {
     cat("\n")
     cat("No reference found for the following Gene_Species_Strain combinations:\n")

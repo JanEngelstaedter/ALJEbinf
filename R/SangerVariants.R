@@ -101,7 +101,8 @@ callSangerVariants_fasta <- function(sampleKey_file,
                          AA_mutation = NA,
                          AA_OtoM = NA,
                          AA_mut_name = NA,
-                         AA_mut_name_Ecoli = NA)
+                         AA_mut_name_Ecoli = NA,
+                         RefSeq_ID = NA)
   variantsDetails[, names(sampleKey)] <- NA
   variantsDetails <- variantsDetails |>
     dplyr::select(all_of(names(sampleKey)),
@@ -137,6 +138,8 @@ callSangerVariants_fasta <- function(sampleKey_file,
         variantsDetails$Nt_pos[j] <- mismatches$SubjectStart[k]
         variantsDetails$Nt_original[j] <- mismatches$SubjectSubstring[k]
         variantsDetails$Nt_mutation[j] <- mismatches$PatternSubstring[k]
+        variantsDetails$RefSeq_ID[j] <- sampleKey$Reference[i]
+
         variantsDetails <- fillMutationsTableRow_DNA(variantsDetails,
                                                      j,
                                                      sampleKey$Reference[i],
