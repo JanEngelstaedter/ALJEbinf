@@ -62,8 +62,10 @@ fillMutationsTableRow_DNA <- function(muts, k, refSeq_ID, seqs, coordinates) {
       if (is.na(muts$Nt_OtoM[k])) {
         muts$Nt_OtoM[k] <- Nt_OtoM
       } else {
-        if (muts$Nt_OtoM[k] != Nt_OtoM)
-          warning(paste0("Nt_OtoM column not consistent with Nt_original and Nt_mutation columns in row ", k, "."))
+        if (muts$Nt_OtoM[k] != Nt_OtoM) {
+          if (is.na(muts$Warning[k]))
+            muts$Warning[k] <- "Nt_OtoM inconsistent with Nt_original and Nt_mutation"
+        }
       }
     }
 
@@ -74,14 +76,18 @@ fillMutationsTableRow_DNA <- function(muts, k, refSeq_ID, seqs, coordinates) {
       if (is.na(muts$Nt_original[k])) {
         muts$Nt_original[k] <- Nt_original
       } else {
-        if (muts$Nt_original[k] != Nt_original)
-          warning(paste0("Nt_original column not consistent with Nt_OtoM column in row ", k, "."))
+        if (muts$Nt_original[k] != Nt_original) {
+          if (is.na(muts$Warning[k]))
+            muts$Warning[k] <- "Nt_original inconsistent with Nt_OtoM"
+        }
       }
       if (is.na(muts$Nt_mutation[k])) {
         muts$Nt_mutation[k] <- Nt_mutation
       } else {
-        if (muts$Nt_mutation[k] != Nt_mutation)
-          warning(paste0("Nt_mutation column not consistent with Nt_OtoM column in row ", k, "."))
+        if (muts$Nt_mutation[k] != Nt_mutation) {
+          if (is.na(muts$Warning[k]))
+            muts$Warning[k] <- "Nt_mutation inconsistent with Nt_OtoM"
+        }
       }
     }
 
@@ -91,13 +97,16 @@ fillMutationsTableRow_DNA <- function(muts, k, refSeq_ID, seqs, coordinates) {
                                           coordinates[[refSeq_ID]],
                                           direction = "FocalToRef")
       if (is.na(Nt_pos_Ecoli)) {
-        warning(paste0("Nt_pos (", muts$Nt_pos[k], ", in row ", k, ") predicted to not exist in E. coli."))
+        if (is.na(muts$Warning[k]))
+          muts$Warning[k] <- "Nt_pos predicted to not exist in E. coli"
       }
       else if (is.na(muts$Nt_pos_Ecoli[k])) {
         muts$Nt_pos_Ecoli[k] <- Nt_pos_Ecoli
       } else {
-        if (muts$Nt_pos_Ecoli[k] != Nt_pos_Ecoli)
-          warning(paste0("Nt_pos_Ecoli column not consistent with Nt_pos column in row ", k, "."))
+        if (muts$Nt_pos_Ecoli[k] != Nt_pos_Ecoli) {
+          if (is.na(muts$Warning[k]))
+            muts$Warning[k] <- "Nt_pos_Ecoli inconsistent with Nt_pos"
+        }
       }
     }
 
@@ -107,13 +116,16 @@ fillMutationsTableRow_DNA <- function(muts, k, refSeq_ID, seqs, coordinates) {
                                     coordinates[[refSeq_ID]],
                                     direction = "RefToFocal")
       if (is.na(Nt_pos)) {
-        warning(paste0("Nt_pos_Ecoli (", muts$Nt_pos_Ecoli[k], ", in row ", k, ") predicted to not exist in this species."))
+        if (is.na(muts$Warning[k]))
+          muts$Warning[k] <- "Nt_pos_Ecoli predicted to not exist in this species"
       }
       else if (is.na(muts$Nt_pos[k])) {
         muts$Nt_pos[k] <- Nt_pos
       } else {
-        if (muts$Nt_pos[k] != Nt_pos)
-          warning(paste0("Nt_pos column not consistent with Nt_pos_Ecoli column in row ", k, "."))
+        if (muts$Nt_pos[k] != Nt_pos) {
+          if (is.na(muts$Warning[k]))
+            muts$Warning[k] <- "Nt_pos inconsistent with Nt_pos_Ecoli"
+        }
       }
     }
 
@@ -127,26 +139,35 @@ fillMutationsTableRow_DNA <- function(muts, k, refSeq_ID, seqs, coordinates) {
       if (is.na(muts$Gene[k])) {
         muts$Gene[k] <- gene
       } else {
-        if(muts$Gene[k] != gene)
-          warning(paste0("Gene column not consistent with Nt_mut_name column in row ", k, ","))
+        if(muts$Gene[k] != gene) {
+          if (is.na(muts$Warning[k]))
+            muts$Warning[k] <- "Nt_pos inconsistent with Nt_pos_Ecoli"
+        }
       }
       if (is.na(muts$Nt_pos[k])) {
         muts$Nt_pos[k] <- Nt_pos
       } else {
-        if(muts$Nt_pos[k] != Nt_pos)
-          warning(paste0("Nt_pos column not consistent with Nt_mut_name column in row ", k, ","))
+        if(muts$Nt_pos[k] != Nt_pos) {
+           if (is.na(muts$Warning[k]))
+            muts$Warning[k] <- "Nt_pos inconsistent with Nt_mut_name"
+        }
+
       }
       if (is.na(muts$Nt_original[k])) {
         muts$Nt_original[k] <- Nt_original
       } else {
-        if(muts$Nt_original[k] != Nt_original)
-          warning(paste0("Nt_original column not consistent with Nt_mut_name column in row ", k, ","))
+        if(muts$Nt_original[k] != Nt_original) {
+          if (is.na(muts$Warning[k]))
+            muts$Warning[k] <- "Nt_pos inconsistent with Nt_mut_name"
+        }
       }
       if (is.na(muts$Nt_mutation[k])) {
         muts$Nt_mutation[k] <- Nt_mutation
       } else {
-        if(muts$Nt_mutation[k] != Nt_mutation)
-          warning(paste0("Nt_mutation column not consistent with Nt_mut_name column in row ", k, ","))
+        if (muts$Nt_mutation[k] != Nt_mutation) {
+          if (is.na(muts$Warning[k]))
+            muts$Warning[k] <- "Nt_pos inconsistent with Nt_mut_name"
+        }
       }
     }
 
@@ -160,7 +181,8 @@ fillMutationsTableRow_DNA <- function(muts, k, refSeq_ID, seqs, coordinates) {
         muts$Nt_mut_name[k] <- mutName
       } else {
         if (muts$Nt_mut_name[k] != mutName) {
-          warning(paste0("Nt_mut_name column not consistent with Nt_original, Nt_pos and Nt_mutation columns in row ", k, ","))
+          if (is.na(muts$Warning[k]))
+            muts$Warning[k] <- "Nt_mut_name inconsistent with Nt_original, Nt_pos and Nt_mutation"
         }
       }
     }
@@ -175,20 +197,26 @@ fillMutationsTableRow_DNA <- function(muts, k, refSeq_ID, seqs, coordinates) {
       if (is.na(muts$Nt_pos_Ecoli[k])) {
         muts$Nt_pos_Ecoli[k] <- Nt_pos_Ecoli
       } else {
-        if(muts$Nt_pos_Ecoli[k] != Nt_pos_Ecoli)
-          warning(paste0("Nt_pos_Ecoli column not consistent with Nt_mut_name_Ecoli column in row ", k, ","))
+        if(muts$Nt_pos_Ecoli[k] != Nt_pos_Ecoli) {
+          if (is.na(muts$Warning[k]))
+            muts$Warning[k] <- "Nt_pos_Ecoli inconsistent with Nt_mut_name_Ecoli"
+        }
       }
       if (is.na(muts$Nt_original[k])) {
         muts$Nt_original[k] <- Nt_original
       } else {
-        if(muts$Nt_original[k] != Nt_original)
-          warning(paste0("Nt_original column not consistent with Nt_mut_name_Ecoli column in row ", k, ","))
+        if(muts$Nt_original[k] != Nt_original) {
+          if (is.na(muts$Warning[k]))
+            muts$Warning[k] <- "Nt_original inconsistent with Nt_mut_name_Ecoli"
+        }
       }
       if (is.na(muts$Nt_mutation[k])) {
         muts$Nt_mutation[k] <- Nt_mutation
       } else {
-        if(muts$Nt_mutation[k] != Nt_mutation)
-          warning(paste0("Nt_mutation column not consistent with Nt_mut_name_Ecoli column in row ", k, ","))
+        if(muts$Nt_mutation[k] != Nt_mutation) {
+          if (is.na(muts$Warning[k]))
+            muts$Warning[k] <- "Nt_mutation inconsistent with Nt_mut_name_Ecoli"
+        }
       }
     }
 
@@ -202,7 +230,8 @@ fillMutationsTableRow_DNA <- function(muts, k, refSeq_ID, seqs, coordinates) {
         muts$Nt_mut_name_Ecoli[k] <- mutName_Ecoli
       } else {
         if (muts$Nt_mut_name_Ecoli[k] != mutName_Ecoli) {
-          warning(paste0("Nt_mut_name_Ecoli column not consistent with Nt_original, Nt_pos_Ecoli and Nt_mutation columns in row ", k, ","))
+          if (is.na(muts$Warning[k]))
+            muts$Warning[k] <- "Nt_mut_name_Ecoli inconsistent with Nt_original, Nt_pos_Ecoli and Nt_mutation"
         }
       }
     }
@@ -218,14 +247,18 @@ fillMutationsTableRow_DNA <- function(muts, k, refSeq_ID, seqs, coordinates) {
       if (is.na(muts$Codon_original[k])) {
         muts$Codon_original[k] <- codon_original
       } else {
-        if (muts$Codon_original[k] != codon_original)
-          warning(paste0("Codon_original column not consistent with Nt_pos columns in row ", k, ","))
+        if (muts$Codon_original[k] != codon_original) {
+          if (is.na(muts$Warning[k]))
+            muts$Warning[k] <- "Codon_original inconsistent with Nt_pos"
+        }
       }
       if (is.na(muts$Codon_mutation[k])) {
         muts$Codon_mutation[k] <- codon_mutation
       } else {
-        if (muts$Codon_mutation[k] != codon_mutation)
-          warning(paste0("Codon_mutation column not consistent with Nt_pos and Nt_mutation columns in row ", k, ","))
+        if (muts$Codon_mutation[k] != codon_mutation) {
+          if (is.na(muts$Warning[k]))
+            muts$Warning[k] <- "Codon_mutation inconsistent with Nt_pos and Nt_mutation"
+        }
       }
     }
 
@@ -235,8 +268,10 @@ fillMutationsTableRow_DNA <- function(muts, k, refSeq_ID, seqs, coordinates) {
       if (is.na(muts$Codon_OtoM[k])) {
         muts$Codon_OtoM[k] <- codon_OtoM
       } else {
-        if (muts$Codon_OtoM[k] != codon_OtoM)
-          warning(paste0("Codon_OtoM column not consistent with Codon_Original and Codon_mutation columns in row ", k, ","))
+        if (muts$Codon_OtoM[k] != codon_OtoM) {
+          if (is.na(muts$Warning[k]))
+            muts$Warning[k] <- "Codon_OtoM inconsistent with Codon_Original and Codon_mutation"
+        }
       }
     }
 
@@ -247,14 +282,18 @@ fillMutationsTableRow_DNA <- function(muts, k, refSeq_ID, seqs, coordinates) {
       if (is.na(muts$Codon_original[k])) {
         muts$Codon_original[k] <- Codon_original
       } else {
-        if (muts$Codon_original[k] != Codon_original)
-          warning(paste0("Codon_original column not consistent with Codon_OtoM column in row ", k, "."))
+        if (muts$Codon_original[k] != Codon_original) {
+          if (is.na(muts$Warning[k]))
+            muts$Warning[k] <- "Codon_original inconsistent with Codon_OtoM"
+        }
       }
       if (is.na(muts$Codon_mutation[k])) {
         muts$Codon_mutation[k] <- Codon_mutation
       } else {
-        if (muts$Codon_mutation[k] != Codon_mutation)
-          warning(paste0("Codon_mutation column not consistent with Codon_OtoM column in row ", k, "."))
+        if (muts$Codon_mutation[k] != Codon_mutation) {
+          if (is.na(muts$Warning[k]))
+            muts$Warning[k] <- "Codon_mutation inconsistent with Codon_OtoM"
+        }
       }
     }
 
@@ -272,26 +311,34 @@ fillMutationsTableRow_DNA <- function(muts, k, refSeq_ID, seqs, coordinates) {
         if (is.na(muts$Nt_pos[k])) {
           muts$Nt_pos[k] <- Nt_pos
         } else {
-          if (muts$Nt_pos[k] != Nt_pos)
-            warning(paste0("Nt_pos column not consistent with codons and AA_pos position in row ", k, "."))
+          if (muts$Nt_pos[k] != Nt_pos) {
+            if (is.na(muts$Warning[k]))
+              muts$Warning[k] <- "Nt_pos inconsistent with codons and AA_pos position"
+          }
         }
         if (is.na(muts$Nt_original[k])) {
           muts$Nt_original[k] <- Nt_original
         } else {
-          if (muts$Nt_original[k] != Nt_original)
-            warning(paste0("Nt_original column not consistent with codons and AA_pos column in row ", k, "."))
+          if (muts$Nt_original[k] != Nt_original) {
+            if (is.na(muts$Warning[k]))
+              muts$Warning[k] <- "Nt_original inconsistent with codons and AA_pos"
+          }
         }
         if (is.na(muts$Nt_mutation[k])) {
           muts$Nt_mutation[k] <- Nt_mutation
         } else {
-          if (muts$Nt_mutation[k] != Nt_mutation)
-            warning(paste0("Nt_mutation column not consistent with codons and AA_pos column in row ", k, "."))
+          if (muts$Nt_mutation[k] != Nt_mutation) {
+            if (is.na(muts$Warning[k]))
+              muts$Warning[k] <- "Nt_mutation inconsistent with codons and AA_pos"
+          }
         }
       }
       else if ((sum(nts_original != nts_mutation) == 0)) {
-        warning(paste0("No nucleotide differences between Codon_original and Codon_mutation in row ", k, "."))
+        if (is.na(muts$Warning[k]))
+          muts$Warning[k] <- "No nucleotide differences between Codon_original and Codon_mutation"
       } else {
-        warning(paste0("More than one nucleotide differences between Codon_original and Codon_mutation in row ", k, "."))
+        if (is.na(muts$Warning[k]))
+          muts$Warning[k] <- "More than one nucleotide differences between Codon_original and Codon_mutation"
       }
     }
 
@@ -309,26 +356,34 @@ fillMutationsTableRow_DNA <- function(muts, k, refSeq_ID, seqs, coordinates) {
         if (is.na(muts$Nt_pos_Ecoli[k])) {
           muts$Nt_pos_Ecoli[k] <- Nt_pos_Ecoli
         } else {
-          if (muts$Nt_pos_Ecoli[k] != Nt_pos_Ecoli)
-            warning(paste0("Nt_pos_Ecoli column not consistent with codons and AA_pos position in row ", k, "."))
+          if (muts$Nt_pos_Ecoli[k] != Nt_pos_Ecoli) {
+            if (is.na(muts$Warning[k]))
+              muts$Warning[k] <- "Nt_pos_Ecoli inconsistent with codons and AA_pos position"
+          }
         }
         if (is.na(muts$Nt_original[k])) {
           muts$Nt_original[k] <- Nt_original
         } else {
-          if (muts$Nt_original[k] != Nt_original)
-            warning(paste0("Nt_original column not consistent with codons and AA_pos column in row ", k, "."))
+          if (muts$Nt_original[k] != Nt_original) {
+            if (is.na(muts$Warning[k]))
+              muts$Warning[k] <- "Nt_original inconsistent with codons and AA_pos"
+          }
         }
         if (is.na(muts$Nt_mutation[k])) {
           muts$Nt_mutation[k] <- Nt_mutation
         } else {
-          if (muts$Nt_mutation[k] != Nt_mutation)
-            warning(paste0("Nt_mutation column not consistent with codons and AA_pos column in row ", k, "."))
+          if (muts$Nt_mutation[k] != Nt_mutation) {
+            if (is.na(muts$Warning[k]))
+              muts$Warning[k] <- "Nt_mutation inconsistent with codons and AA_pos"
+          }
         }
       }
       else if ((sum(nts_original != nts_mutation) == 0)) {
-        warning(paste0("No nucleotide differences between Codon_original and Codon_mutation in row ", k, "."))
+        if (is.na(muts$Warning[k]))
+          muts$Warning[k] <- "No nucleotide differences between Codon_original and Codon_mutation"
       } else {
-        warning(paste0("More than one nucleotide differences between Codon_original and Codon_mutation in row ", k, "."))
+        if (is.na(muts$Warning[k]))
+          muts$Warning[k] <- "More than one nucleotide differences between Codon_original and Codon_mutation"
       }
     }
   }
@@ -336,7 +391,7 @@ fillMutationsTableRow_DNA <- function(muts, k, refSeq_ID, seqs, coordinates) {
 }
 
 
-# internal function to fill the amino acid columns in a mutations table row:
+# internal function to fill the amino acids in a mutations table row:
 fillMutationsTableRow_Protein <- function(muts, k, refSeq_ID, seqs, coordinates) {
 
   # translating from nucleotides to amino acids:
@@ -350,20 +405,26 @@ fillMutationsTableRow_Protein <- function(muts, k, refSeq_ID, seqs, coordinates)
     if (is.na(muts$AA_pos[k])) {
       muts$AA_pos[k] <- aa_pos
     } else {
-      if (muts$AA_pos[k] != aa_pos)
-        warning(paste0("AA_pos column not consistent with Nt_pos column in row ", k, "."))
+      if (muts$AA_pos[k] != aa_pos) {
+        if (is.na(muts$Warning[k]))
+          muts$Warning[k] <- "AA_pos inconsistent with Nt_pos"
+      }
     }
     if (is.na(muts$AA_original[k])) {
       muts$AA_original[k] <- aa_original
     } else {
-      if (muts$AA_original[k] != aa_original)
-        warning(paste0("AA_original column not consistent with Codon_original column in row ", k, "."))
+      if (muts$AA_original[k] != aa_original) {
+        if (is.na(muts$Warning[k]))
+          muts$Warning[k] <- "AA_original inconsistent with Codon_original"
+      }
     }
     if (is.na(muts$AA_mutation[k])) {
       muts$AA_mutation[k] <- aa_mutation
     } else {
-      if (muts$AA_mutation[k] != aa_mutation)
-        warning(paste0("AA_mutation column not consistent with Codon_mutation column in row ", k, "."))
+      if (muts$AA_mutation[k] != aa_mutation) {
+        if (is.na(muts$Warning[k]))
+          muts$Warning[k] <- "AA_mutation inconsistent with Codon_mutation"
+      }
     }
   }
 
@@ -375,13 +436,16 @@ fillMutationsTableRow_Protein <- function(muts, k, refSeq_ID, seqs, coordinates)
                                   AAinput = TRUE,
                                   AAoutput = TRUE)
     if (is.na(aa_pos)) {
-      warning(paste0("AA_pos_Ecoli (", muts$AA_pos_Ecoli[k], ", in row ", k, ") predicted to not exist in this species."))
+      if (is.na(muts$Warning[k]))
+        muts$Warning[k] <- "AA_pos_Ecoli predicted to not exist in this species"
     }
     else if (is.na(muts$AA_pos[k])) {
       muts$AA_pos[k] <- aa_pos
     } else {
-      if (muts$AA_pos[k] != aa_pos)
-        warning(paste0("AA_pos column not consistent with AA_pos_Ecoli column in row ", k, "."))
+      if (muts$AA_pos[k] != aa_pos) {
+        if (is.na(muts$Warning[k]))
+          muts$Warning[k] <- "AA_pos inconsistent with AA_pos_Ecoli"
+      }
     }
   }
 
@@ -393,13 +457,16 @@ fillMutationsTableRow_Protein <- function(muts, k, refSeq_ID, seqs, coordinates)
                                         AAinput = TRUE,
                                         AAoutput = TRUE)
     if (is.na(aa_pos_Ecoli)) {
-      warning(paste0("AA_pos (", muts$AA_pos[k], ", in row ", k, ") predicted to not exist in E. coli."))
+      if (is.na(muts$Warning[k]))
+        muts$Warning[k] <- "AA_pos predicted to not exist in E. coli"
     }
     else if (is.na(muts$AA_pos_Ecoli[k])) {
       muts$AA_pos_Ecoli[k] <- aa_pos_Ecoli
     } else {
-      if (muts$AA_pos_Ecoli[k] != aa_pos_Ecoli)
-        warning(paste0("AA_pos_Ecoli column not consistent with AA_pos column in row ", k, "."))
+      if (muts$AA_pos_Ecoli[k] != aa_pos_Ecoli) {
+        if (is.na(muts$Warning[k]))
+          muts$Warning[k] <- "AA_pos_Ecoli inconsistent with AA_pos"
+      }
     }
   }
 
@@ -410,14 +477,18 @@ fillMutationsTableRow_Protein <- function(muts, k, refSeq_ID, seqs, coordinates)
     if (is.na(muts$AA_original[k])) {
       muts$AA_original[k] <- aa_original
     } else {
-      if (muts$AA_original[k] != aa_original)
-        warning(paste0("AA_original column not consistent with AA_OtoM column in row ", k, "."))
+      if (muts$AA_original[k] != aa_original) {
+        if (is.na(muts$Warning[k]))
+          muts$Warning[k] <- "AA_original inconsistent with AA_OtoM"
+      }
     }
     if (is.na(muts$AA_mutation[k])) {
       muts$AA_mutation[k] <- aa_mutation
     } else {
-      if (muts$AA_mutation[k] != aa_mutation)
-        warning(paste0("AA_mutation column not consistent with AA_OtoM column in row ", k, "."))
+      if (muts$AA_mutation[k] != aa_mutation) {
+        if (is.na(muts$Warning[k]))
+          muts$Warning[k] <- "AA_mutation inconsistent with AA_OtoM"
+      }
     }
   }
 
@@ -428,8 +499,10 @@ fillMutationsTableRow_Protein <- function(muts, k, refSeq_ID, seqs, coordinates)
     if (is.na(muts$AA_OtoM[k])) {
       muts$AA_OtoM[k] <- aa_OtoM
     } else {
-      if (muts$AA_OtoM[k] != aa_OtoM)
-        warning(paste0("AA_OtoM column not consistent with AA_original and AA_mutation columns in row ", k, "."))
+      if (muts$AA_OtoM[k] != aa_OtoM) {
+        if (is.na(muts$Warning[k]))
+          muts$Warning[k] <- "AA_OtoM inconsistent with AA_original and AA_mutation"
+      }
     }
   }
 
@@ -444,8 +517,10 @@ fillMutationsTableRow_Protein <- function(muts, k, refSeq_ID, seqs, coordinates)
     if (is.na(muts$AA_mut_name[k] )) {
       muts$AA_mut_name[k] <- aa_mut_name
     } else {
-      if (muts$AA_mut_name[k] != aa_mut_name)
-        warning(paste0("AA_mut_name column not consistent with AA_pos, AA_original, AA_mutation columns in row ", k, "."))
+      if (muts$AA_mut_name[k] != aa_mut_name) {
+        if (is.na(muts$Warning[k]))
+          muts$Warning[k] <- "AA_mut_name inconsistent with AA_pos, AA_original, AA_mutation"
+      }
     }
   }
 
@@ -463,8 +538,10 @@ fillMutationsTableRow_Protein <- function(muts, k, refSeq_ID, seqs, coordinates)
     if (is.na(muts$AA_mut_name_Ecoli[k] )) {
       muts$AA_mut_name_Ecoli[k] <- aa_mut_name_Ecoli
     } else {
-      if (muts$AA_mut_name_Ecoli[k] != aa_mut_name_Ecoli)
-        warning(paste0("AA_mut_name_Ecoli column not consistent with AA_pos_Ecoli, AA_original, AA_mutation columns in row ", k, "."))
+      if (muts$AA_mut_name_Ecoli[k] != aa_mut_name_Ecoli) {
+        if (is.na(muts$Warning[k]))
+          muts$Warning[k] <- "AA_mut_name_Ecoli inconsistent with AA_pos_Ecoli, AA_original, AA_mutation"
+      }
     }
   }
   return(muts)
@@ -499,7 +576,8 @@ fillMutationsTable <- function(muts, refs, seqs, coordinates) {
 
   # add strainID columns:
   muts <- dplyr::mutate(muts, Strain_ID = gsub(" ", "_", paste(Species, Strain)))
-  muts <- dplyr::mutate(muts, RefSeq_ID = NA)
+  muts <- dplyr::mutate(muts, RefSeq_ID = NA,
+                              Warning = NA)
   refs <- dplyr::mutate(refs, Strain_ID = gsub(" ", "_", paste(Species, Strain)))
 
   genes <- unique(muts$Gene)
@@ -538,7 +616,8 @@ fillMutationsTable <- function(muts, refs, seqs, coordinates) {
               muts <- fillMutationsTableRow_DNA(muts, k, refSeq_ID, seqs, coordinates)
               muts <- fillMutationsTableRow_Protein(muts, k, refSeq_ID, seqs, coordinates)
             } else {
-              warning(paste0("Row ", k, " in mutation table does not appear to represent a single point mutation; this column has been skipped."))
+              if (is.na(muts$Warning[k]))
+                muts$Warning[k] <- "Not a single point mutation"
             }
           }
         }
@@ -590,9 +669,15 @@ mutationsTableSummary <- function(muts) {
     tidyr::unite(Gene_Strain, Gene, Strain_ID, sep = "_") |>
     dplyr::pull(Gene_Strain)
   if (length(missingRefs) > 0) {
-    cat("\n")
-    cat("No reference found for the following Gene_Species_Strain combinations:\n")
+    cat("\nNo reference found for the following Gene_Species_Strain combinations:\n")
     cat(paste(" ", missingRefs, sep = "", collapse = "\n"))
-    cat("\n\n")
+    cat("\n")
+  }
+
+  nWarnings <- sum(!is.na(muts$Warning))
+  if (nWarnings == 1L) {
+    cat(paste0("\nProblems encountered in one row of the table (see Warnings column).\n\n"))
+  } else if (nWarnings > 0) {
+    cat(paste0("\nProblems encountered in ", nWarnings, " rows of the table (see Warnings column).\n\n"))
   }
 }
