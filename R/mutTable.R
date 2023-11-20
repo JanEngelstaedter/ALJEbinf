@@ -50,6 +50,15 @@ isPointMutation <- function(muts, k) {
     if ((length(aas) != 2L) || (nchar(aas[1]) != 1L) || (nchar(aas[2]) != 1L))
       pointMut <- FALSE
   }
+
+  if ((!is.na(muts$AA_original[k])) && (nchar(muts$AA_original[k]) != 1L)) {
+    pointMut <- FALSE
+  }
+
+  if ((!is.na(muts$AA_mutation[k])) && (nchar(muts$AA_mutation[k]) != 1L)) {
+    pointMut <- FALSE
+  }
+
   return(pointMut)
 }
 
@@ -566,19 +575,24 @@ fillMutationsTableRow_Protein <- function(muts, k, refSeq_ID, seqs, coordinates)
 #' @export
 #'
 fillMutationsTable <- function(muts, refs, seqs, coordinates) {
+  # add additional columns:
+  muts <- dplyr::mutate(muts, Strain_ID = gsub(" ", "_", paste(Species, Strain)),
+                              RefSeq_ID = NA,
+                              Warning = NA)
+
+  # check if pos columns can be converted to numbers, if not flag warning:
+  muts$Warning[grepl("\\D", muts$Nt_pos)] <- "Nt_pos not a number"
+  muts$Warning[grepl("\\D", muts$Nt_pos_Ecoli)] <- "Nt_pos_Ecoli not a number"
+  muts$Warning[grepl("\\D", muts$AA_pos)] <- "AA_pos not a number"
+  muts$Warning[grepl("\\D", muts$AA_pos_Ecoli)] <- "AA_pos_Ecoli not a number"
+
   # convert positions into numbers:
   # (needs to be improved if mutations other than point mutations are to be included)
-  muts$Nt_pos <- as.integer(muts$Nt_pos)
-  muts$Nt_pos_Ecoli <- as.integer(muts$Nt_pos_Ecoli)
-  muts$AA_pos <- as.integer(muts$AA_pos)
-  muts$AA_pos_Ecoli <- as.integer(muts$AA_pos_Ecoli)
+  muts$Nt_pos <- suppressWarnings(as.integer(muts$Nt_pos))
+  muts$Nt_pos_Ecoli <- suppressWarnings(as.integer(muts$Nt_pos_Ecoli))
+  muts$AA_pos <- suppressWarnings(as.integer(muts$AA_pos))
+  muts$AA_pos_Ecoli <- suppressWarnings(as.integer(muts$AA_pos_Ecoli))
   #muts$MIC_mgPerL <- as.double(muts$MIC_mgPerL)
-
-  # add strainID columns:
-  muts <- dplyr::mutate(muts, Strain_ID = gsub(" ", "_", paste(Species, Strain)))
-  muts <- dplyr::mutate(muts, RefSeq_ID = NA,
-                              Warning = NA)
-  refs <- dplyr::mutate(refs, Strain_ID = gsub(" ", "_", paste(Species, Strain)))
 
   genes <- unique(muts$Gene)
   strainIDs <- unique(muts$Strain_ID)
@@ -610,21 +624,37 @@ fillMutationsTable <- function(muts, refs, seqs, coordinates) {
       }
       if (!is.na(refSeq_ID)) {
         for(k in 1:nrow(muts)) {
-          if ((muts$Gene[k] == genes[i]) && (muts$Strain_ID[k] == strainIDs[j])) {
+          if ((muts$Gene[k] == genes[i]) &&
+              (muts$Strain_ID[k] == strainIDs[j])) {
             muts$RefSeq_ID[k] <- refSeq_ID
-            if (isPointMutation(muts, k)) {
-              muts <- fillMutationsTableRow_DNA(muts, k, refSeq_ID, seqs, coordinates)
-              muts <- fillMutationsTableRow_Protein(muts, k, refSeq_ID, seqs, coordinates)
-            } else {
-              if (is.na(muts$Warning[k]))
-                muts$Warning[k] <- "Not a single point mutation"
+            if (all(is.na(c(muts$Nt_pos[k], muts$Nt_pos_Ecoli[k],
+                            muts$Nt_mut_name[k], muts$Nt_mut_name_Ecoli[k],
+                            muts$AA_pos[k], muts$AA_pos_Ecoli[k],
+                            muts$AA_mut_name[k], muts$AA_mut_name_Ecoli[k]))) && (is.na(muts$Warning[k]))) {
+              muts$Warning[k] <- "No mutation position (Nt or AA) available"
+            }
+            if (all(is.na(c(muts$Nt_mutation[k],
+                            muts$Nt_mut_name[k], muts$Nt_mut_name_Ecoli[k],
+                            muts$Codon_mutation[k],
+                            muts$AA_mutation[k],
+                            muts$AA_mut_name[k], muts$AA_mut_name_Ecoli[k]))) && (is.na(muts$Warning[k]))) {
+              muts$Warning[k] <- "No mutation (Nt, codon or AA) available"
+            }
+            if (is.na(muts$Warning[k])) {
+              if (isPointMutation(muts, k)) {
+                muts <- fillMutationsTableRow_DNA(muts, k, refSeq_ID, seqs, coordinates)
+                muts <- fillMutationsTableRow_Protein(muts, k, refSeq_ID, seqs, coordinates)
+              } else {
+                if (is.na(muts$Warning[k]))
+                  muts$Warning[k] <- "Not a single point mutation"
+              }
             }
           }
         }
       }
     }
   }
-  cat("\n")
+  muts$Warning[is.na(muts$RefSeq_ID)] <- "No reference sequence available"
   mutationsTableSummary(muts)
   return(muts)
 }
@@ -636,7 +666,7 @@ fillMutationsTable <- function(muts, refs, seqs, coordinates) {
 #' @export
 #'
 mutationsTableSummary <- function(muts) {
-  cat("Summary of mutations table:\n")
+  cat("\nSummary of mutations table:\n")
   cat("  Number of species:",
       muts |> dplyr::pull(Species) |> unique() |> length(), "\n")
   cat("  Genes with mutations:",
