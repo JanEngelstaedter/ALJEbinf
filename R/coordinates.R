@@ -9,13 +9,18 @@
 #'
 #' @param dnaFocal Focal DNA sequence.
 #' @param dnaRef Reference DNA sequence, e.g. Escherichia coli.
+#' @param aligOutput If FALSE (default), only the actual coordinates are returned.
+#' If TRUE then the alignment is also returned.
 #'
-#' @return A table with two columns: the position in the focal sequence (posFocal),
+#' @return By default, a table with two columns: the position in the focal sequence (posFocal),
 #' and the position in the reference sequence (posRef).
+#' If aligOutput==TRUE, a list containing the coordinates and the alignment.
 #'
 #' @export
 #'
-getCoordinates <- function(dnaFocal, dnaRef) {
+getCoordinates <- function(dnaFocal,
+                           dnaRef,
+                           aligOutput = FALSE) {
   AAFocal <- Biostrings::translate(dnaFocal,
                                    genetic.code = Biostrings::getGeneticCode("Bacterial",
                                                                              full.search = TRUE))
@@ -57,7 +62,12 @@ getCoordinates <- function(dnaFocal, dnaRef) {
       coordinates$posRef[i] <- posRef
     }
   }
-  return(coordinates)
+  if (aligOutput) {
+    return(list(coordinates = coordinates,
+                alignment = alig))
+  } else {
+    return(coordinates)
+  }
 }
 
 #' Obtain tables of coordinates.
