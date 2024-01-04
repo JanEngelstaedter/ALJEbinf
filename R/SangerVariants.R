@@ -171,7 +171,7 @@ callSangerVariants_fasta <- function(sampleKey_file,
     }
   }
   variantsDetails <- variantsDetails[1:(j - 1),] |>
-    select(-RefSeq_ID)
+    dplyr::select(-RefSeq_ID)
   variantsSummary <- variantsDetails |>
     dplyr::group_by(dplyr::across(tidyselect::all_of(names(sampleKey)))) |>
     dplyr::summarise(Nt_variants = paste(Nt_mut_name, collapse = ", ")) |>
