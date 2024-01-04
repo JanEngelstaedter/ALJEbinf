@@ -154,19 +154,20 @@ callSangerVariants_fasta <- function(sampleKey_file,
       }
     }
     if (variantsSummary$n_insertions[i] > 0) { # any insertions?
-      for(k in 1:length(indels@insertion[[1]])) {
-        variantsDetails[j, 1:11] <- variantsSummary[i, 1:11] # same first columns
-        variantsDetails$Variant_type[j] <- "insertion"
-        variantsDetails$Nt_pos[j] <- indels@insertion[[1]]@start[k]
-        variantsDetails$Nt_original[j] <- mismatches$SubjectSubstring[k]
-        variantsDetails$Nt_mutation[j] <- mismatches$PatternSubstring[k]
-        variantsDetails <- fillMutationsTableRow_DNA(variantsDetails,
-                                                     j,
-                                                     sampleKey$Reference[i],
-                                                     referenceSeqs,
-                                                     coordinates[[sampleKey$Gene[i]]])
-        j <- j + 1
-      }
+      warning(paste0("Insertions detected for sample ", sampleKey$Sample_ID[i], ", but processing these is currently not supported."))
+      # for(k in 1:length(indels@insertion[[1]])) {
+      #   variantsDetails[j, 1:11] <- variantsSummary[i, 1:11] # same first columns
+      #   variantsDetails$Variant_type[j] <- "insertion"
+      #   variantsDetails$Nt_pos[j] <- indels@insertion[[1]]@start[k]
+      #   variantsDetails$Nt_original[j] <- mismatches$SubjectSubstring[k]
+      #   variantsDetails$Nt_mutation[j] <- mismatches$PatternSubstring[k]
+      #   variantsDetails <- fillMutationsTableRow_DNA(variantsDetails,
+      #                                                j,
+      #                                                sampleKey$Reference[i],
+      #                                                referenceSeqs,
+      #                                                coordinates[[sampleKey$Gene[i]]])
+      #   j <- j + 1
+      # }
     }
   }
   variantsDetails <- variantsDetails[1:(j - 1),] |>
