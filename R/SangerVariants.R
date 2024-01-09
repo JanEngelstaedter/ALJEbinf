@@ -1,6 +1,6 @@
 # Functions to call variants from Sanger sequencing data
 
-#' Title
+#' Calling variants in Sanger sequencing data
 #'
 #' @param sampleKey_file File name to a table specifying the samples.
 #' This table must have the following columns:
@@ -32,17 +32,25 @@ callSangerVariants_fasta <- function(sampleKey_file,
   if (!("Success" %in% names(sampleKey))) { # add success column if not there
     sampleKey |> mutate(Success = TRUE)
   }
+  if (!("Direction" %in% names(sampleKey))) { # add success column if not there
+    sampleKey |> mutate(Direction = "F")
+  }
   requiredSampleKeyColumns <- c("Sample_ID",
                                 "Species",
                                 "Strain",
                                 "Gene",
                                 "Primer",
+                                "Direction",
                                 "File_name",
                                 "Success",
                                 "Reference")
   if (!all(requiredSampleKeyColumns %in% names(sampleKey))) {
     stop("Columns in sampleKey file don't conform to what is expected - refer to documentation.")
   }
+  if (!all(sampleKey$Direction %in% c("F", "R"))) {
+    stop("Values in Direction column in sampleKey file need to be either F or R.")
+  }
+
   sampleKey <- sampleKey |>
     dplyr::select(all_of(requiredSampleKeyColumns),
                   tidyselect::everything()) |>
@@ -115,6 +123,8 @@ callSangerVariants_fasta <- function(sampleKey_file,
 
     # mapping of contig to reference:
     contig <- sampleSeqs[[sampleKey$File_name[i]]]
+    if (sampleKey$Direction[i] == "R")
+      contig <- Biostrings::reverseComplement(contig)
     ref <- referenceSeqs[[sampleKey$Reference[i]]]
     alig <- Biostrings::pairwiseAlignment(contig, ref, type = "local")
     mismatches <- Biostrings::mismatchTable(alig)
