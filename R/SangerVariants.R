@@ -181,13 +181,14 @@ callSangerVariants_fasta <- function(sampleKey_file,
     }
   }
   variantsDetails <- variantsDetails[1:(j - 1),] |>
-    dplyr::select(-RefSeq_ID)
+    dplyr::select(-RefSeq_ID, -Success)
   variantsSummary <- variantsDetails |>
     dplyr::group_by(dplyr::across(tidyselect::all_of(names(sampleKey)))) |>
     dplyr::summarise(Nt_variants = paste(Nt_mut_name, collapse = ", ")) |>
     dplyr::right_join(variantsSummary) |>
     dplyr::ungroup() |>
     dplyr::relocate(Nt_variants, .after = last_col()) |>
+    dplyr::select(-Success) |>
     dplyr::arrange(Gene, Primer, Sample_ID) |>
     as.data.frame()
   return(list(summary = variantsSummary,
