@@ -30,10 +30,10 @@ callSangerVariants_fasta <- function(sampleKey_file,
   # read in, check and sort sampleKey:
   sampleKey <- readr::read_csv(sampleKey_file, show_col_types = FALSE)
   if (!("Success" %in% names(sampleKey))) { # add success column if not there
-    sampleKey |> mutate(Success = TRUE)
+    sampleKey <- dplyr::mutate(sampleKey, Success = TRUE)
   }
-  if (!("Direction" %in% names(sampleKey))) { # add success column if not there
-    sampleKey |> mutate(Direction = "F")
+  if (!("Direction" %in% names(sampleKey))) { # add Direction column if not there
+    sampleKey <- dplyr::mutate(sampleKey, Direction = "F")
   }
   requiredSampleKeyColumns <- c("Sample_ID",
                                 "Species",
