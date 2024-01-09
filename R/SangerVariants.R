@@ -143,7 +143,7 @@ callSangerVariants_fasta <- function(sampleKey_file,
     # fill in variantsDetails table:
     if (variantsSummary$n_mismatches[i] > 0) { # any mismatches?
       for(k in 1:nrow(mismatches)) {
-        variantsDetails[j, 1:11] <- variantsSummary[i, 1:11] # same first columns
+        variantsDetails[j, 1:11] <- variantsSummary[i, 1:12] # same first columns
         variantsDetails$Variant_type[j] <- "substitution"
         variantsDetails$Nt_pos[j] <- mismatches$SubjectStart[k]
         variantsDetails$Nt_original[j] <- mismatches$SubjectSubstring[k]
@@ -188,7 +188,10 @@ callSangerVariants_fasta <- function(sampleKey_file,
     dplyr::right_join(variantsSummary) |>
     dplyr::ungroup() |>
     dplyr::relocate(Nt_variants, .after = last_col()) |>
+    dplyr::arrange(Gene, Primer, Sample_ID) |>
     as.data.frame()
   return(list(summary = variantsSummary,
               details = variantsDetails))
 }
+
+
