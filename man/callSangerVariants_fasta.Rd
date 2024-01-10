@@ -2,7 +2,7 @@
 % Please edit documentation in R/SangerVariants.R
 \name{callSangerVariants_fasta}
 \alias{callSangerVariants_fasta}
-\title{Title}
+\title{Calling variants in Sanger sequencing data}
 \usage{
 callSangerVariants_fasta(
   sampleKey_file,
@@ -33,9 +33,9 @@ This table must have the following columns:
 \item{hard_trim}{A vector specifying how many nucleotides on each side of a sequence should be hard-trimmed.}
 }
 \value{
-A list containing two tables: "summary" list the number of variants of different types detected for each sample,
+A list containing two tables: "summary" contains the number of variants of different types detected for each sample,
 whereas "details" provides detailed information for each variant.
 }
 \description{
-Title
+Calling variants in Sanger sequencing data
 }
