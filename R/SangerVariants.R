@@ -224,7 +224,7 @@ callSangerVariants_fasta <- function(sampleKey_file,
 #' The following two examples illustrate these options. Both examples involve two reads,
 #' but in the first both reads sequenced properly whereas in the second example one read
 #' sequence was deemed unsuccessful:
-#' \verbatim{
+#'
 #' Example 1: \cr
 #' \cr
 #' \code{-------x------y---------      Success=TRUE} \cr
@@ -246,7 +246,7 @@ callSangerVariants_fasta <- function(sampleKey_file,
 #' \code{1            1           24        24              x, y} \cr
 #' \code{2            1           24        24              x, y} \cr
 #' \code{3            NA          NA        NA              none} \cr
-#' }
+#'
 #' @param variants A list of called variant tables, as output by the \code{callSangerVatiants_fasta} function.
 #' @param strictness Determines how stringent the consolidation across different sequences will be -
 #' the greater this number the fewer variants will be called. See below for details.
