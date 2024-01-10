@@ -41,25 +41,25 @@ The following two examples illustrate these options. Both examples involve two r
 but in the first both reads sequenced properly whereas in the second example one read
 sequence was deemed unsuccessful:
 
-Example 1:
-
-\code{-------x------y---------      Success=TRUE}
-\code{    ---x-----------------z--  Success=TRUE}
-
-\code{Strictness   Map_start   Map_end   Contig_length   Variants called}
-\code{0            1           28        28              x, y, z}
-\code{1            1           28        28              x, z}
-\code{2            5           24        20              x}
-\code{3            5           24        20              x}
-
-Example 2:
-
-\code{-------x------y---------  Success=TRUE}
-\code{   ---------------        Success=FALSE}
-
-\code{Strictness   Map_start   Map_end   Contig_length   Variants called}
-\code{0            1           24        24              x, y}
-\code{1            1           24        24              x, y}
-\code{2            1           24        24              x, y}
-\code{3            NA          NA        NA              none}
+Example 1: \cr
+\cr
+\code{-------x------y---------      Success=TRUE} \cr
+\code{    ---x-----------------z--  Success=TRUE} \cr
+\cr
+\code{Strictness   Map_start   Map_end   Contig_length   Variants called} \cr
+\code{0            1           28        28              x, y, z} \cr
+\code{1            1           28        28              x, z} \cr
+\code{2            5           24        20              x} \cr
+\code{3            5           24        20              x} \cr
+\cr
+Example 2: \cr
+\cr
+\code{-------x------y---------  Success=TRUE}\cr
+\code{   ---------------        Success=FALSE}\cr
+\cr
+\code{Strictness   Map_start   Map_end   Contig_length   Variants called} \cr
+\code{0            1           24        24              x, y} \cr
+\code{1            1           24        24              x, y} \cr
+\code{2            1           24        24              x, y} \cr
+\code{3            NA          NA        NA              none} \cr
 }
