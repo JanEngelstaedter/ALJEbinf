@@ -15,14 +15,16 @@ callSangerVariants_fasta(
 \arguments{
 \item{sampleKey_file}{File name to a table specifying the samples.
 This table must have the following columns:
-* Sample_ID: a unique ID for each bacterial sample
-* Species
-* Strain
-* Gene
-* Primer: the name of the primer used for the sequencing
-* File_name: the name of the fasta file (without file extension)
-* Success: whether or not the sequencing was successful (TRUE or FALSE)
-* Reference: the name of the corresponding reference sequence}
+\itemize{
+  \item Sample_ID: a unique ID for each bacterial sample
+  \item Species
+  \item Strain
+  \item Gene
+  \item Primer: the name of the primer used for the sequencing
+  \item File_name: the name of the fasta file (without file extension)
+  \item Success: whether or not the sequencing was successful (TRUE or FALSE)
+  \item Reference: the name of the corresponding reference sequence
+}}
 
 \item{fasta_path}{The path where the fasta files are located.}
 
