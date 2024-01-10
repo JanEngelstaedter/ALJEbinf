@@ -40,7 +40,7 @@ where there are no conflicts between variants detected vs. not detected.
 The following two examples illustrate these options. Both examples involve two reads,
 but in the first both reads sequenced properly whereas in the second example one read
 sequence was deemed unsuccessful:
-
+\verbatim{
 Example 1: \cr
 \cr
 \code{-------x------y---------      Success=TRUE} \cr
@@ -62,4 +62,5 @@ Example 2: \cr
 \code{1            1           24        24              x, y} \cr
 \code{2            1           24        24              x, y} \cr
 \code{3            NA          NA        NA              none} \cr
+}
 }
