@@ -27,18 +27,18 @@ getCoordinates <- function(dnaFocal,
   AARef <- Biostrings::translate(dnaRef,
                                  genetic.code = Biostrings::getGeneticCode("Bacterial",
                                                                            full.search = TRUE))
-  alig <- Biostrings::pairwiseAlignment(AAFocal, AARef)
+  alig <- pwalign::pairwiseAlignment(AAFocal, AARef)
 
   # extract the aligned sequences from the alignment
   aligFocal <- alig |>
-    Biostrings::alignedPattern() |>
+    pwalign::alignedPattern() |>
     toString() |>
     stringr::str_replace_all("[a-zA-Z*]", "NNN") |>
     stringr::str_replace_all("[-]", "---") |>
     Biostrings::DNAString()
 
   aligRef <- alig |>
-    Biostrings::alignedSubject() |>
+    pwalign::alignedSubject() |>
     toString() |>
     stringr::str_replace_all("[a-zA-Z*]", "NNN") |>
     stringr::str_replace_all("[-]", "---") |>

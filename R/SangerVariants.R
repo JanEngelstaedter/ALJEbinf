@@ -128,9 +128,9 @@ callSangerVariants_fasta <- function(sampleKey_file,
     if (sampleKey$Direction[i] == "R")
       contig <- Biostrings::reverseComplement(contig)
     ref <- referenceSeqs[[sampleKey$Reference[i]]]
-    alig <- Biostrings::pairwiseAlignment(contig, ref, type = "local")
-    mismatches <- Biostrings::mismatchTable(alig)
-    indels <- Biostrings::indel(alig)
+    alig <- pwalign::pairwiseAlignment(contig, ref, type = "local")
+    mismatches <- pwalign::mismatchTable(alig)
+    indels <- pwalign::indel(alig)
 
     # fill in variantsSummary table:
     variantsSummary$Contig_length[i] <- length(contig)

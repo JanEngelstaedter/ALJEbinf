@@ -17,6 +17,7 @@ Imports:
     stringr,
     readr,
     Biostrings,
+    pwalign,
     IRanges,
     DECIPHER,
     XVector,
