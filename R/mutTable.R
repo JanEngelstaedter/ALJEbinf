@@ -594,6 +594,25 @@ fillMutationsTable <- function(muts, refs, seqs, coordinates) {
   muts$AA_pos_Ecoli <- suppressWarnings(as.integer(muts$AA_pos_Ecoli))
   #muts$MIC_mgPerL <- as.double(muts$MIC_mgPerL)
 
+  # infer gene name from mutation name:
+  for(i in 1:nrow(muts)) {
+    if (is.na(muts$Gene[i])) {
+      mut_names <- c(muts$Nt_mut_name[i], muts$Nt_mut_name_Ecoli[i],
+                     muts$AA_mut_name[i], muts$AA_mut_name_Ecoli[i])
+      mut_names <- mut_names[!is.na(mut_names)]
+      if (length(mut_names) > 0) {
+        gene_names <- str_extract(mut_names, "^.+?(?=_)")
+        if (length(unique(gene_names)) > 1) {
+          muts$Warning[i] <- "inconsistent gene names"
+        } else {
+          muts$Gene[i] <- gene_names[1]
+        }
+      } else {
+        muts$Warning[i] <- "missing gene name"
+      }
+    }
+  }
+
   genes <- unique(muts$Gene)
   strainIDs <- unique(muts$Strain_ID)
   for(i in 1:length(genes)) {
