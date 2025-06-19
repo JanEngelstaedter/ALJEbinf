@@ -395,6 +395,41 @@ fillMutationsTableRow_DNA <- function(muts, k, refSeq_ID, seqs, coordinates) {
           muts$Warning[k] <- "More than one nucleotide differences between Codon_original and Codon_mutation"
       }
     }
+    # filling in Nt_original and Nt_mutation from Codon and Nt_pos:
+    if (!is.na(muts$Codon_original[k]) &&
+        !is.na(muts$Codon_mutation[k]) &&
+        !is.na(muts$Nt_pos[k])) {
+      nts_original <- stringr::str_split(muts$Codon_original[k], "")[[1]]
+      nts_mutation <- stringr::str_split(muts$Codon_mutation[k], "")[[1]]
+      if (sum(nts_original != nts_mutation) == 1) { # one nucleotide difference?
+        Nt_original <- nts_original[nts_original != nts_mutation]
+        Nt_mutation <- nts_mutation[nts_original != nts_mutation]
+
+        if (is.na(muts$Nt_original[k])) {
+          muts$Nt_original[k] <- Nt_original
+        } else {
+          if (muts$Nt_original[k] != Nt_original) {
+            if (is.na(muts$Warning[k]))
+              muts$Warning[k] <- "Nt_original inconsistent with codons and AA_pos"
+          }
+        }
+        if (is.na(muts$Nt_mutation[k])) {
+          muts$Nt_mutation[k] <- Nt_mutation
+        } else {
+          if (muts$Nt_mutation[k] != Nt_mutation) {
+            if (is.na(muts$Warning[k]))
+              muts$Warning[k] <- "Nt_mutation inconsistent with codons and AA_pos"
+          }
+        }
+      }
+      else if ((sum(nts_original != nts_mutation) == 0)) {
+        if (is.na(muts$Warning[k]))
+          muts$Warning[k] <- "No nucleotide differences between Codon_original and Codon_mutation"
+      } else {
+        if (is.na(muts$Warning[k]))
+          muts$Warning[k] <- "More than one nucleotide differences between Codon_original and Codon_mutation"
+      }
+    }
   }
   return(muts)
 }
