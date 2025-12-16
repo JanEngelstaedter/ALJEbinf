@@ -612,7 +612,7 @@ fillMutationsTableRow_Protein <- function(muts, k, refSeq_ID, seqs, coordinates)
 fillMutationsTable <- function(muts, refs, seqs, coordinates) {
   # make sure muts table has at least the required columns:
   columns <- mutationsTableColumns()
-  muts[, setdiff(columns, names(muts))] <- ""
+  muts[, setdiff(columns, names(muts))] <- NA
   muts <- muts[, c(columns, setdiff(names(muts), columns))]
 
   # add additional columns:
