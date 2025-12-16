@@ -610,6 +610,11 @@ fillMutationsTableRow_Protein <- function(muts, k, refSeq_ID, seqs, coordinates)
 #' @export
 #'
 fillMutationsTable <- function(muts, refs, seqs, coordinates) {
+  # make sure muts table has at least the required columns:
+  columns <- mutationsTableColumns()
+  muts[, setdiff(columns, names(muts))] <- ""
+  muts <- muts[, c(columns, setdiff(names(muts), columns))]
+
   # add additional columns:
   muts <- dplyr::mutate(muts, Strain_ID = gsub(" ", "_", paste(Species, Strain)),
                               RefSeq_ID = NA,
@@ -764,4 +769,30 @@ mutationsTableSummary <- function(muts) {
   } else if (nWarnings > 0) {
     cat(paste0("\nProblems encountered in ", nWarnings, " rows of the table (see Warnings column).\n\n"))
   }
+}
+
+
+# helper function returning the minimum columns that a mutations table should have:
+mutationsTableColumns <- function() {
+  muts <- c("Species",
+            "Strain",
+            "Gene",
+            "Nt_pos",
+            "Nt_pos_Ecoli",
+            "Nt_original",
+            "Nt_mutation",
+            "Nt_OtoM",
+            "Nt_mut_name",
+            "Nt_mut_name_Ecoli",
+            "Codon_original",
+            "Codon_mutation",
+            "Codon_OtoM",
+            "AA_pos",
+            "AA_pos_Ecoli",
+            "AA_original",
+            "AA_mutation",
+            "AA_OtoM",
+            "AA_mut_name",
+            "AA_mut_name_Ecoli")
+  return(muts)
 }
